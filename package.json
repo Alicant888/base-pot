@@ -1,0 +1,51 @@
+{
+  "name": "base-pot",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "prisma:push": "prisma db push",
+    "contracts:build": "node scripts/run-foundry.mjs build",
+    "contracts:test": "node scripts/run-foundry.mjs test",
+    "contracts:deploy": "node scripts/run-foundry.mjs deploy-local",
+    "dev:chain": "node scripts/run-foundry.mjs anvil",
+    "sync:deployment": "node scripts/sync-deployment.mjs"
+  },
+  "dependencies": {
+    "@base-org/account": "latest",
+    "@prisma/client": "^6.0.0",
+    "@tanstack/react-query": "latest",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.543.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.5.5",
+    "viem": "latest",
+    "wagmi": "latest",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^8.46.2",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.15.0",
+    "eslint-config-next": "^15.0.0",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
+    "prisma": "^6.0.0",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}

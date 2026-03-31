@@ -1,0 +1,3 @@
+export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+export const USDC_DECIMALS = 6;
+export const APP_NAME = "Base Pot";

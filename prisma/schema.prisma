@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Pot {
+  id                    String        @id @default(cuid())
+  slug                  String        @unique
+  chainId               Int
+  onchainPotId          Int
+  txHash                String
+  title                 String
+  description           String
+  goalAmount            String
+  deadline              DateTime
+  recipientAddress      String
+  organizerAddress      String
+  emoji                 String?
+  suggestedContribution String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+  activities            PotActivity[]
+}
+
+model PotActivity {
+  id           String          @id @default(cuid())
+  potId        String
+  txHash       String          @unique
+  type         PotActivityType
+  actorAddress String
+  amount       String?
+  blockNumber  Int?
+  occurredAt   DateTime        @default(now())
+  pot          Pot             @relation(fields: [potId], references: [id], onDelete: Cascade)
+
+  @@index([potId, occurredAt(sort: Desc)])
+}
+
+enum PotActivityType {
+  CONTRIBUTION
+  FINALIZED
+  CANCELLED
+  REFUND
+}
