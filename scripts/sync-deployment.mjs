@@ -22,7 +22,12 @@ const lines = new Map(
     }),
 );
 
-lines.set("DATABASE_URL", "file:./dev.db");
+if (!lines.has("DATABASE_URL")) {
+  lines.set(
+    "DATABASE_URL",
+    "postgresql://postgres:postgres@127.0.0.1:5432/basepot?schema=public",
+  );
+}
 lines.set("NEXT_PUBLIC_APP_URL", "http://localhost:3000");
 lines.set("NEXT_PUBLIC_CHAIN_ID", String(deployment.chainId));
 lines.set("NEXT_PUBLIC_CHAIN_NAME", deployment.chainId === 31337 ? "Local Base Pot" : "Base");

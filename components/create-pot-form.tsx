@@ -296,7 +296,7 @@ export function CreatePotForm() {
             Flow
           </p>
           <div className="mt-4 space-y-4 text-sm text-muted">
-            <p>1. Create the pot onchain and save the share metadata in SQLite.</p>
+            <p>1. Create the pot onchain and save the share metadata in Postgres.</p>
             <p>2. Post the share link into chat.</p>
             <p>3. Contributors approve USDC, contribute, then the organizer finalizes or cancels.</p>
           </div>

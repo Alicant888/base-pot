@@ -16,7 +16,9 @@ const publicEnvSchema = z.object({
 });
 
 const serverEnvSchema = z.object({
-  DATABASE_URL: z.string().default("file:./dev.db"),
+  DATABASE_URL: z
+    .string()
+    .default("postgresql://postgres:postgres@127.0.0.1:5432/basepot?schema=public"),
 });
 
 export const publicEnv = publicEnvSchema.parse({

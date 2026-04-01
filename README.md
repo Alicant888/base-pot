@@ -5,7 +5,7 @@ Base Pot is a local MVP for one-link USDC collections on Base.
 It covers:
 
 - create a pot with title, description, goal, deadline, recipient, and suggested amount
-- generate a shareable pot page backed by Prisma + SQLite metadata and onchain activity
+- generate a shareable pot page backed by Prisma + Postgres metadata and onchain activity
 - connect with Base Account or a regular injected browser wallet
 - approve mock USDC, contribute, finalize, cancel, and claim refunds
 - run Solidity build/tests locally with Foundry
@@ -17,7 +17,7 @@ It covers:
 - Tailwind CSS
 - wagmi + viem + @tanstack/react-query
 - @base-org/account
-- Prisma + SQLite
+- Prisma + Postgres
 - Solidity + Foundry
 
 ## Project layout
@@ -44,6 +44,9 @@ corepack pnpm prisma:generate
 copy .env.example .env.local
 ```
 
+Point `DATABASE_URL` at a Postgres database before continuing. For Vercel, use a
+managed Postgres provider such as Vercel Postgres, Neon, Supabase, or Prisma Postgres.
+
 3. Start the local Base-compatible chain:
 
 ```bash
@@ -62,10 +65,9 @@ node scripts/run-foundry.mjs deploy-local
 corepack pnpm sync:deployment
 ```
 
-6. Push the Prisma schema to the local SQLite database:
+6. Push the Prisma schema to your Postgres database:
 
 ```bash
-set DATABASE_URL=file:./dev.db
 corepack pnpm prisma:push
 ```
 
@@ -81,7 +83,7 @@ Open `http://localhost:3000`.
 
 The `/pot/[slug]` route now uses a split rendering model:
 
-- Prisma + SQLite store only the shareable metadata and local read model for the pot slug.
+- Prisma + Postgres store only the shareable metadata and read model for the pot slug.
 - The current onchain pot snapshot is read on the server from the contract before render.
 - Recent activity is derived from contract events on the server, not posted from the client.
 - Wallet connect, approve, contribute, finalize, cancel, and refund actions live in a lazy client island.
@@ -112,8 +114,34 @@ node scripts/run-foundry.mjs test
 
 After a local deploy, `corepack pnpm sync:deployment` reads `contracts/deployments/local.json` and updates `.env.local` with:
 
+- `DATABASE_URL` (only when it is not already present)
 - `NEXT_PUBLIC_CHAIN_ID`
 - `NEXT_PUBLIC_RPC_URL`
+- `NEXT_PUBLIC_POT_CONTRACT_ADDRESS`
+- `NEXT_PUBLIC_USDC_ADDRESS`
+- `NEXT_PUBLIC_DEPLOY_BLOCK`
+
+## Vercel deployment
+
+This repo is configured for Vercel with a dedicated build command in `vercel.json`
+that runs:
+
+```bash
+pnpm vercel-build
+```
+
+That build command generates the Prisma client, applies the schema with `prisma db push`,
+and then runs `next build`.
+
+Set these environment variables in Vercel before the first deploy:
+
+- `DATABASE_URL`
+- `NEXT_PUBLIC_APP_URL`
+- `NEXT_PUBLIC_CHAIN_ID`
+- `NEXT_PUBLIC_CHAIN_NAME`
+- `NEXT_PUBLIC_CHAIN_CURRENCY_SYMBOL`
+- `NEXT_PUBLIC_RPC_URL`
+- `NEXT_PUBLIC_BLOCK_EXPLORER_URL`
 - `NEXT_PUBLIC_POT_CONTRACT_ADDRESS`
 - `NEXT_PUBLIC_USDC_ADDRESS`
 - `NEXT_PUBLIC_DEPLOY_BLOCK`
@@ -153,5 +181,5 @@ node scripts/run-foundry.mjs test
 - Pot activity on the `/pot/[slug]` page is derived from onchain contract events, and the client refreshes that server feed after successful writes.
 - Optional wagmi connector peers are aliased out in `next.config.ts`, so builds stay clean while the app uses only Base Account plus the injected wallet flow.
 - Base Account capability checks are loaded on demand after wallet connection instead of inflating the initial pot page bundle.
-- Prisma client generation is validated. In this sandbox session, `prisma migrate dev` did not complete cleanly, so the documented local setup uses `prisma:push` for the fastest path.
+- Prisma client generation is validated. For this MVP, `prisma:push` is the fastest path locally and is also what the Vercel build runs before `next build`.
 - The remaining build warning is unrelated to bundle size: Next.js still reports that the current flat ESLint config does not register the Next ESLint plugin explicitly.

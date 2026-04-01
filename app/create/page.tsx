@@ -9,8 +9,8 @@ export default function CreatePage() {
         </p>
         <h1 className="mt-3 text-5xl font-semibold tracking-tight">Set the target, then ship the link.</h1>
         <p className="mt-4 text-lg leading-8 text-muted">
-          The onchain pot stores the goal, recipient, and deadline. SQLite keeps the shareable page
-          metadata lightweight for the MVP UI.
+          The onchain pot stores the goal, recipient, and deadline. Postgres keeps the shareable page
+          metadata durable for local development and Vercel deployments.
         </p>
       </div>
 
