@@ -8,7 +8,7 @@ export const createPotMetadataSchema = z.object({
   onchainPotId: z.number().int().nonnegative(),
   txHash: z.string().regex(/^0x[a-fA-F0-9]{64}$/),
   title: z.string().trim().min(3).max(80),
-  description: z.string().trim().min(8).max(240),
+  description: z.string().trim().min(3).max(240),
   goalAmount: z.string().trim().min(1),
   deadline: z.string().datetime(),
   recipientAddress: addressSchema,

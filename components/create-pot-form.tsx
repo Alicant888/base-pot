@@ -15,7 +15,7 @@ import { parseUsdc } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z.string().trim().min(3).max(80),
-  description: z.string().trim().min(8).max(240),
+  description: z.string().trim().min(3).max(240),
   goalAmount: z.string().trim().min(1),
   deadline: z.string().min(1),
   recipientAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
