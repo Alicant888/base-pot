@@ -28,11 +28,11 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
       <div
         className={
           compact
-            ? "rounded-[28px] border border-slate-200 bg-white/94 p-4 shadow-panel backdrop-blur"
+            ? "rounded-[28px] border border-slate-200 bg-white/96 p-4 text-center shadow-panel backdrop-blur"
             : "rounded-3xl border border-slate-200 bg-white p-4 shadow-panel"
         }
       >
-        <div className="flex items-center justify-between gap-4">
+        <div className={compact ? "space-y-3" : "flex items-center justify-between gap-4"}>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
               Connected
@@ -59,20 +59,34 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
     <div
       className={
         compact
-          ? "rounded-[30px] border border-slate-200 bg-white/94 p-4 shadow-panel backdrop-blur"
+          ? "rounded-[30px] border border-slate-200 bg-white/96 p-5 text-center shadow-panel backdrop-blur"
           : "rounded-[32px] border border-slate-200 bg-white p-5 shadow-panel"
       }
     >
-      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Wallet</p>
-      <h3 className={compact ? "mt-2 text-xl font-semibold" : "mt-2 text-2xl font-semibold"}>
-        {compact ? "Connect your wallet first" : "Connect in Base App or a browser wallet"}
+      {compact ? null : (
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Wallet</p>
+      )}
+      <h3
+        className={
+          compact
+            ? "text-2xl font-semibold tracking-tight"
+            : "mt-2 text-2xl font-semibold"
+        }
+      >
+        {compact ? "Connect wallet" : "Connect in Base App or a browser wallet"}
       </h3>
-      <p className={compact ? "mt-2 text-sm leading-6 text-muted" : "mt-2 max-w-xl text-sm text-muted"}>
+      <p
+        className={
+          compact
+            ? "mt-2 text-sm leading-6 text-muted"
+            : "mt-2 max-w-xl text-sm text-muted"
+        }
+      >
         {compact
-          ? "Base Account is first. Standard injected wallets still work in a regular browser."
+          ? "Base Account first. Injected wallets still work in a regular browser."
           : "The same pot URL works with Base Account in-app and standard injected wallets in a browser."}
       </p>
-      <div className={compact ? "mt-4 grid gap-3" : "mt-4 flex flex-wrap gap-3"}>
+      <div className={compact ? "mt-5 grid gap-3" : "mt-4 flex flex-wrap gap-3"}>
         {orderedConnectors.map((connector) => (
           <button
             key={connector.uid}
@@ -88,7 +102,9 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
           </button>
         ))}
       </div>
-      <p className="mt-3 text-xs uppercase tracking-[0.16em] text-muted">Status: {status}</p>
+      {compact ? null : (
+        <p className="mt-3 text-xs uppercase tracking-[0.16em] text-muted">Status: {status}</p>
+      )}
     </div>
   );
 }

@@ -1,23 +1,8 @@
 ﻿import Link from "next/link";
-import { ArrowRight, CircleDollarSign, Clock3, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, CircleDollarSign, Clock3, ShieldCheck } from "lucide-react";
 
 import { HowItWorksSheet } from "@/components/how-it-works-sheet";
 import { WalletPanel } from "@/components/wallet-panel";
-
-const quickSignals = [
-  {
-    title: "One page",
-    copy: "Open, connect, act.",
-  },
-  {
-    title: "Base-native",
-    copy: "Built for Base App first.",
-  },
-  {
-    title: "Refund path",
-    copy: "Clean fallback if the goal misses.",
-  },
-];
 
 const sampleStats = [
   {
@@ -36,51 +21,49 @@ const sampleStats = [
 
 export default function LandingPage() {
   return (
-    <div className="grid h-[calc(100svh-6rem)] gap-4 overflow-hidden lg:h-[calc(100svh-7rem)] lg:grid-cols-[0.88fr_1.12fr] lg:gap-5">
-      <section className="order-1 flex min-h-0 flex-col gap-4">
-        <div className="rounded-[34px] border border-slate-200/90 bg-white/88 p-4 shadow-panel backdrop-blur sm:p-5">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                Start here
-              </p>
-              <h1 className="mt-1 text-2xl font-semibold tracking-tight sm:text-[2rem]">
-                Base Pot
-              </h1>
-            </div>
-            <div className="inline-flex size-12 items-center justify-center rounded-2xl bg-mist text-base ring-1 ring-line">
-              <Sparkles className="size-5" />
-            </div>
-          </div>
-
+    <div className="grid min-h-[calc(100svh-5.5rem)] gap-4 lg:h-[calc(100svh-7rem)] lg:grid-cols-[0.82fr_1.18fr] lg:gap-5">
+      <section className="order-1 flex min-h-0 flex-col items-center justify-center gap-4 lg:items-stretch lg:justify-center">
+        <div className="w-full max-w-md lg:max-w-none">
           <WalletPanel compact />
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          {quickSignals.map((signal) => (
-            <article
-              key={signal.title}
-              className="rounded-[24px] border border-slate-200 bg-white/82 p-3 shadow-panel backdrop-blur"
+        <div className="w-full max-w-md rounded-[30px] border border-slate-200 bg-white/88 p-5 text-center shadow-panel backdrop-blur sm:p-6 lg:hidden">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-base">
+            Base-native flow
+          </p>
+          <h1 className="mt-3 text-[clamp(2rem,7vw,2.9rem)] font-semibold leading-[0.95] tracking-tight text-ink">
+            Connect first. Understand the pot. Move.
+          </h1>
+          <p className="mt-3 text-sm leading-6 text-muted">
+            Base Pot should feel like an app screen, not a long site. Connect the wallet, then go
+            straight into action.
+          </p>
+
+          <div className="mt-5 grid gap-3">
+            <Link
+              href="/create"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-base px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(0,82,255,0.22)]"
             >
-              <p className="text-sm font-semibold leading-5">{signal.title}</p>
-              <p className="mt-1 text-xs leading-5 text-muted">{signal.copy}</p>
-            </article>
-          ))}
+              Create a pot
+              <ArrowRight className="size-4" />
+            </Link>
+            <HowItWorksSheet />
+          </div>
         </div>
       </section>
 
-      <section className="order-2 min-h-0 overflow-hidden rounded-[38px] border border-slate-200 bg-white shadow-panel">
-        <div className="relative flex h-full flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_top_right,rgba(0,82,255,0.16),transparent_26%),linear-gradient(180deg,#ffffff_0%,#f6f9ff_100%)] p-5 sm:p-6">
-          <div className="absolute inset-x-5 top-5 h-24 rounded-[28px] bg-hero-grid opacity-60 sm:inset-x-6 sm:top-6" />
+      <section className="order-2 hidden min-h-0 overflow-hidden rounded-[38px] border border-slate-200 bg-white shadow-panel lg:block">
+        <div className="relative flex h-full flex-col justify-between overflow-hidden bg-[radial-gradient(circle_at_top_right,rgba(0,82,255,0.16),transparent_26%),linear-gradient(180deg,#ffffff_0%,#f6f9ff_100%)] p-6">
+          <div className="absolute inset-x-6 top-6 h-24 rounded-[28px] bg-hero-grid opacity-60" />
 
           <div className="relative z-10">
             <p className="inline-flex rounded-full border border-line bg-white/86 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-base backdrop-blur">
               Mobile-first Base App flow
             </p>
-            <h2 className="mt-4 max-w-2xl text-[clamp(2rem,6vw,4.75rem)] font-semibold leading-[0.94] tracking-tight text-ink">
+            <h2 className="mt-4 max-w-2xl text-[clamp(2rem,5vw,4.75rem)] font-semibold leading-[0.94] tracking-tight text-ink">
               Collect USDC without turning the link into a website.
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-7 text-muted sm:text-base">
+            <p className="mt-4 max-w-xl text-base leading-7 text-muted">
               Open the link, connect the wallet, understand the goal instantly, and move into
               action without hunting through a long landing page.
             </p>
@@ -133,7 +116,7 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <div className="grid gap-3 self-end sm:grid-cols-2 lg:grid-cols-1">
+            <div className="grid gap-3 self-end">
               <article className="rounded-[26px] border border-slate-200 bg-white/86 p-4 backdrop-blur">
                 <div className="inline-flex size-11 items-center justify-center rounded-2xl bg-mist text-base ring-1 ring-line">
                   <ShieldCheck className="size-5" />

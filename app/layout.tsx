@@ -25,12 +25,12 @@ export default async function RootLayout({
       <body className="font-sans antialiased">
         <Providers initialState={initialState}>
           <div className="min-h-screen">
-            <header className="border-b border-slate-200/80 bg-white/84 backdrop-blur">
-              <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 sm:py-4 lg:px-8">
+            <header className="border-b border-slate-200/70 bg-white/84 backdrop-blur sm:border-slate-200/80">
+              <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-3 sm:justify-between sm:px-6 sm:py-4 lg:px-8">
                 <Link href="/" className="text-lg font-semibold tracking-tight">
                   Base Pot
                 </Link>
-                <nav className="flex items-center gap-4 text-sm font-semibold text-muted sm:gap-6">
+                <nav className="hidden items-center gap-6 text-sm font-semibold text-muted sm:flex">
                   <Link href="/">Home</Link>
                   <Link href="/create">Create</Link>
                 </nav>
