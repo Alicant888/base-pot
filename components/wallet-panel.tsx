@@ -73,7 +73,7 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
             : "mt-2 text-2xl font-semibold"
         }
       >
-        {compact ? "Connect wallet" : "Connect in Base App or a browser wallet"}
+        {compact ? "Connect your wallet" : "Connect in Base App or a browser wallet"}
       </h3>
       <p
         className={
@@ -83,7 +83,7 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
         }
       >
         {compact
-          ? "Base Account first. Injected wallets still work in a regular browser."
+          ? "Use Base Account in the Base app, or connect an injected wallet in a regular browser."
           : "The same pot URL works with Base Account in-app and standard injected wallets in a browser."}
       </p>
       <div className={compact ? "mt-5 grid gap-3" : "mt-4 flex flex-wrap gap-3"}>
