@@ -38,14 +38,15 @@ corepack pnpm install
 corepack pnpm prisma:generate
 ```
 
-2. Copy the example env file:
+2. Copy the local env example:
 
 ```bash
 copy .env.example .env.local
 ```
 
-Point `DATABASE_URL` at a Postgres database before continuing. For Vercel, use a
-managed Postgres provider such as Vercel Postgres, Neon, Supabase, or Prisma Postgres.
+Point `DATABASE_URL` at a Postgres database before continuing. For local development,
+this can be a local Postgres instance. For hosted environments, use a managed Postgres
+provider such as Vercel Postgres, Neon, Supabase, or Prisma Postgres.
 
 3. Start the local Base-compatible chain:
 
@@ -59,7 +60,7 @@ node scripts/run-foundry.mjs anvil
 node scripts/run-foundry.mjs deploy-local
 ```
 
-5. Sync the deployed addresses into `.env.local`:
+5. Sync the local deployed addresses into `.env.local`:
 
 ```bash
 corepack pnpm sync:deployment
@@ -78,6 +79,17 @@ corepack pnpm dev
 ```
 
 Open `http://localhost:3000`.
+
+## Production env setup
+
+Use `.env.production.example` as the production/mainnet template.
+
+It already includes the recorded Base Mainnet deployment values for:
+
+- `NEXT_PUBLIC_CHAIN_ID=8453`
+- `NEXT_PUBLIC_POT_CONTRACT_ADDRESS=0x239B43e2210984cC1b90a11F1B216fb3ccD37635`
+- `NEXT_PUBLIC_USDC_ADDRESS=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
+- `NEXT_PUBLIC_DEPLOY_BLOCK=44120371`
 
 ## Pot page architecture
 
@@ -112,14 +124,63 @@ node scripts/run-foundry.mjs test
 
 ## Deployment sync
 
-After a local deploy, `corepack pnpm sync:deployment` reads `contracts/deployments/local.json` and updates `.env.local` with:
+The deployment sync helper supports multiple profiles.
 
-- `DATABASE_URL` (only when it is not already present)
+Default local sync:
+
+```bash
+corepack pnpm sync:deployment
+```
+
+Explicit local sync:
+
+```bash
+node scripts/sync-deployment.mjs local
+```
+
+Mainnet values into `.env.local` for local verification against production contracts:
+
+```bash
+node scripts/sync-deployment.mjs base-mainnet
+```
+
+Custom target env file:
+
+```bash
+node scripts/sync-deployment.mjs base-mainnet .env.production.local
+```
+
+The script reads from `contracts/deployments/<profile>.json` and writes these keys:
+
+- `DATABASE_URL` when it is missing
+- `NEXT_PUBLIC_APP_URL`
+- `NEXT_PUBLIC_BASE_APP_NAME`
 - `NEXT_PUBLIC_CHAIN_ID`
+- `NEXT_PUBLIC_CHAIN_NAME`
+- `NEXT_PUBLIC_CHAIN_CURRENCY_SYMBOL`
 - `NEXT_PUBLIC_RPC_URL`
+- `NEXT_PUBLIC_BLOCK_EXPLORER_URL`
 - `NEXT_PUBLIC_POT_CONTRACT_ADDRESS`
 - `NEXT_PUBLIC_USDC_ADDRESS`
 - `NEXT_PUBLIC_DEPLOY_BLOCK`
+
+### Recorded Base Mainnet deployment
+
+The repository also records the current Base Mainnet contract deployment in
+`contracts/deployments/base-mainnet.json`.
+
+Current recorded values:
+
+- `chainId`: `8453`
+- `NEXT_PUBLIC_DEPLOY_BLOCK`: `44120371`
+- `NEXT_PUBLIC_POT_CONTRACT_ADDRESS`: `0x239B43e2210984cC1b90a11F1B216fb3ccD37635`
+- `NEXT_PUBLIC_USDC_ADDRESS`: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
+
+The Base Mainnet chain metadata and RPC defaults were verified against Base docs:
+[Connecting to Base](https://docs.base.org/chain/using-base).
+
+The Base USDC address was verified against Circle docs:
+[USDC Contract Addresses](https://developers.circle.com/stablecoins/usdc-contract-addresses).
 
 ## Vercel deployment
 
@@ -137,6 +198,7 @@ Set these environment variables in Vercel before the first deploy:
 
 - `DATABASE_URL`
 - `NEXT_PUBLIC_APP_URL`
+- `NEXT_PUBLIC_BASE_APP_NAME`
 - `NEXT_PUBLIC_CHAIN_ID`
 - `NEXT_PUBLIC_CHAIN_NAME`
 - `NEXT_PUBLIC_CHAIN_CURRENCY_SYMBOL`
@@ -151,7 +213,7 @@ Set these environment variables in Vercel before the first deploy:
 The app is wired for both:
 
 - local development on Anvil (`chainId=31337`)
-- real Base-compatible deployment (`Base Sepolia` or `Base Mainnet`)
+- real Base-compatible deployment (`Base Sepolia` or Base Mainnet)
 
 For full in-app Base App validation, deploy to Base Sepolia or Base Mainnet and set:
 
