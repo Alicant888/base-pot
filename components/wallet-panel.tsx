@@ -15,6 +15,23 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
   const { connectors, connectAsync, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const [availableConnectorIds, setAvailableConnectorIds] = useState<string[]>([]);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const syncViewport = () => setIsMobileViewport(mediaQuery.matches);
+
+    syncViewport();
+    mediaQuery.addEventListener("change", syncViewport);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncViewport);
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -56,6 +73,9 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
         ),
     [availableConnectorIds, connectors],
   );
+
+  const injectedAvailable = availableConnectorIds.includes("injected");
+  const showRabbyHint = isMobileViewport && !injectedAvailable;
 
   if (isConnected) {
     return (
@@ -136,6 +156,12 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
           </button>
         ))}
       </div>
+      {showRabbyHint ? (
+        <p className="mt-4 text-sm leading-6 text-muted">
+          Rabby on mobile usually works from the Rabby in-app browser, not from a regular mobile
+          browser tab.
+        </p>
+      ) : null}
       {compact ? null : (
         <p className="mt-3 text-xs uppercase tracking-[0.16em] text-muted">Status: {status}</p>
       )}
