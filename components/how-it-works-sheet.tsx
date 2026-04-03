@@ -115,39 +115,53 @@ export function HowItWorksSheet() {
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 py-3 sm:px-6 sm:py-6">
-              <div className="grid gap-3 sm:gap-4">
-                {steps.map((step, index) => {
-                  const Icon = step.icon;
+              <div className="flex min-h-full flex-col">
+                <div className="grid gap-3 sm:gap-4">
+                  {steps.map((step, index) => {
+                    const Icon = step.icon;
 
-                  return (
-                    <article
-                      key={step.title}
-                      className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-3.5 shadow-[0_10px_24px_rgba(5,5,5,0.04)] sm:rounded-[26px] sm:p-5"
-                    >
-                      <div className="flex items-start gap-3 sm:gap-4">
-                        <div className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl bg-white text-base shadow-sm ring-1 ring-slate-200 sm:size-11">
-                          <Icon className="size-4 sm:size-5" />
+                    return (
+                      <article
+                        key={step.title}
+                        className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-3.5 shadow-[0_10px_24px_rgba(5,5,5,0.04)] sm:rounded-[26px] sm:p-5"
+                      >
+                        <div className="flex items-start gap-3 sm:gap-4">
+                          <div className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl bg-white text-base shadow-sm ring-1 ring-slate-200 sm:size-11">
+                            <Icon className="size-4 sm:size-5" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted sm:text-xs">
+                              0{index + 1}
+                            </p>
+                            <h4 className="mt-1 text-[1.1rem] font-semibold leading-[1.1] tracking-tight text-base sm:text-[1.35rem]">
+                              {step.title}
+                            </h4>
+                            <p className="mt-2 text-sm leading-6 text-muted sm:hidden">
+                              {step.mobileCopy}
+                            </p>
+                            <p className="mt-2 hidden text-sm leading-6 text-muted sm:block sm:text-[15px]">
+                              {step.copy}
+                            </p>
+                          </div>
                         </div>
-                        <div className="min-w-0">
-                          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted sm:text-xs">
-                            0{index + 1}
-                          </p>
-                          <h4 className="mt-1 text-[1.1rem] font-semibold leading-[1.1] tracking-tight text-base sm:text-[1.35rem]">
-                            {step.title}
-                          </h4>
-                          <p className="mt-2 text-sm leading-6 text-muted sm:hidden">{step.mobileCopy}</p>
-                          <p className="mt-2 hidden text-sm leading-6 text-muted sm:block sm:text-[15px]">
-                            {step.copy}
-                          </p>
-                        </div>
-                      </div>
-                    </article>
-                  );
-                })}
+                      </article>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-4 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] sm:hidden">
+                  <button
+                    type="button"
+                    onClick={() => setOpen(false)}
+                    className="inline-flex w-full items-center justify-center rounded-full bg-base px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(0,82,255,0.22)]"
+                  >
+                    Back to the app
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="border-t border-slate-100 bg-white px-4 py-3 sm:px-6 sm:py-4">
+            <div className="hidden border-t border-slate-100 bg-white px-4 py-3 sm:block sm:px-6 sm:py-4">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
