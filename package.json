@@ -28,6 +28,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.543.0",
     "next": "^15.0.0",
+    "ox": "^0.14.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^2.5.5",
@@ -36,10 +37,10 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "^8.46.2",
     "@types/node": "^24.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "@typescript-eslint/parser": "^8.46.2",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.15.0",
     "eslint-config-next": "^15.0.0",

@@ -1,9 +1,10 @@
-import { cookieStorage, createConfig, createStorage, http } from "wagmi";
+﻿import { cookieStorage, createConfig, createStorage, http } from "wagmi";
 import { base, baseSepolia } from "wagmi/chains";
 import { baseAccount, injected } from "wagmi/connectors";
 
-import { publicEnv } from "@/lib/env";
+import { BUILDER_CODE_DATA_SUFFIX } from "@/lib/builder-code";
 import { localBasePotChain, supportedChains } from "@/lib/chains";
+import { publicEnv } from "@/lib/env";
 
 export function getConfig() {
   return createConfig({
@@ -24,6 +25,7 @@ export function getConfig() {
       [base.id]: http(),
       [baseSepolia.id]: http(),
     },
+    dataSuffix: BUILDER_CODE_DATA_SUFFIX,
   });
 }
 
