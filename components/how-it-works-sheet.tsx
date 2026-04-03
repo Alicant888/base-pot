@@ -58,11 +58,11 @@ export function HowItWorksSheet() {
 
       {open ? (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/24 px-4 py-6 backdrop-blur-[3px]"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-slate-950/24 px-4 pb-6 pt-3 backdrop-blur-[3px] sm:items-center sm:py-6"
           onClick={() => setOpen(false)}
         >
           <div
-            className="flex w-full max-w-md max-h-[min(42rem,calc(100svh-2rem))] flex-col overflow-hidden rounded-[32px] bg-white/96 backdrop-blur sm:max-w-lg"
+            className="flex w-full max-w-md max-h-[min(42rem,calc(100svh-1rem))] flex-col overflow-hidden rounded-[32px] bg-white/96 backdrop-blur sm:max-w-lg"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
@@ -103,4 +103,5 @@ export function HowItWorksSheet() {
     </>
   );
 }
+
 
