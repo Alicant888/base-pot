@@ -11,6 +11,9 @@ import "@/app/globals.css";
 export const metadata: Metadata = {
   title: "Base Pot",
   description: "One-link USDC collection pots on Base.",
+  other: {
+    "base:app_id": "69ce02b12cecb99f8ef27a40",
+  },
 };
 
 export default async function RootLayout({
