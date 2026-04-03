@@ -7,20 +7,17 @@ const steps = [
   {
     icon: CircleDollarSign,
     title: "Create a pot",
-    copy: "Set the goal, deadline, recipient, and suggested amount in one quick flow.",
-    mobileCopy: "Set the goal, deadline, recipient, and amount.",
+    copy: "Set the goal, deadline, recipient, and amount.",
   },
   {
     icon: Share2,
     title: "Share the link",
-    copy: "Send the same URL in Base App, Telegram, or any group chat.",
-    mobileCopy: "Send the same URL into Base App or your group chat.",
+    copy: "Send the same URL into Base App or your group chat.",
   },
   {
     icon: Clock3,
     title: "Finalize or refund",
-    copy: "If the goal lands, release the payout. If not, contributors claim refunds.",
-    mobileCopy: "Finalize when it lands, or let contributors refund.",
+    copy: "Finalize when it lands, or let contributors refund.",
   },
 ];
 
@@ -61,115 +58,79 @@ export function HowItWorksSheet() {
 
       {open ? (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/28 p-0 backdrop-blur-[3px] sm:items-center sm:p-6"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/24 px-4 py-6 backdrop-blur-[3px]"
           onClick={() => setOpen(false)}
         >
           <div
-            className="flex h-[100svh] w-full max-w-xl flex-col overflow-hidden bg-white shadow-[0_30px_90px_rgba(5,5,5,0.18)] sm:h-auto sm:max-h-[calc(100svh-3rem)] sm:rounded-[32px] sm:border sm:border-slate-200"
+            className="w-full max-w-md rounded-[32px] border border-slate-200 bg-white/96 p-4 text-center shadow-[0_30px_90px_rgba(5,5,5,0.18)] backdrop-blur sm:max-w-lg sm:p-6"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="sticky top-0 z-10 border-b border-slate-100 bg-white/96 px-4 py-3 backdrop-blur sm:px-6 sm:py-4">
-              <div className="flex items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-ink transition hover:border-slate-300"
-                  aria-label="Go back"
-                >
-                  <ArrowLeft className="size-4" />
-                  Back
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="hidden size-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-ink sm:inline-flex"
-                  aria-label="Close how it works"
-                >
-                  <X className="size-4" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="inline-flex rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-ink transition hover:border-slate-300 sm:hidden"
-                >
-                  Done
-                </button>
-              </div>
-
-              <div className="mt-4 text-center sm:text-left">
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-base">
-                  How it works
-                </p>
-                <h3 className="mt-2 text-[1.95rem] font-semibold leading-[1] tracking-tight text-ink sm:text-2xl">
-                  Create, share, finish.
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-muted sm:hidden">
-                  Three short steps, then you are back in the app.
-                </p>
-                <p className="mt-2 hidden text-sm leading-6 text-muted sm:block">
-                  Open this, understand the path, and return to the app whenever you want.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-4 py-3 sm:px-6 sm:py-6">
-              <div className="flex min-h-full flex-col">
-                <div className="grid gap-3 sm:gap-4">
-                  {steps.map((step, index) => {
-                    const Icon = step.icon;
-
-                    return (
-                      <article
-                        key={step.title}
-                        className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-3.5 shadow-[0_10px_24px_rgba(5,5,5,0.04)] sm:rounded-[26px] sm:p-5"
-                      >
-                        <div className="flex items-start gap-3 sm:gap-4">
-                          <div className="inline-flex size-10 shrink-0 items-center justify-center rounded-2xl bg-white text-base shadow-sm ring-1 ring-slate-200 sm:size-11">
-                            <Icon className="size-4 sm:size-5" />
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted sm:text-xs">
-                              0{index + 1}
-                            </p>
-                            <h4 className="mt-1 text-[1.1rem] font-semibold leading-[1.1] tracking-tight text-base sm:text-[1.35rem]">
-                              {step.title}
-                            </h4>
-                            <p className="mt-2 text-sm leading-6 text-muted sm:hidden">
-                              {step.mobileCopy}
-                            </p>
-                            <p className="mt-2 hidden text-sm leading-6 text-muted sm:block sm:text-[15px]">
-                              {step.copy}
-                            </p>
-                          </div>
-                        </div>
-                      </article>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-4 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] sm:hidden">
-                  <button
-                    type="button"
-                    onClick={() => setOpen(false)}
-                    className="inline-flex w-full items-center justify-center rounded-full bg-base px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(0,82,255,0.22)]"
-                  >
-                    Back to the app
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="hidden border-t border-slate-100 bg-white px-4 py-3 sm:block sm:px-6 sm:py-4">
+            <div className="flex items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="inline-flex w-full items-center justify-center rounded-full bg-base px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(0,82,255,0.22)]"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-ink transition hover:border-slate-300"
+                aria-label="Go back"
               >
-                Back to the app
+                <ArrowLeft className="size-4" />
+                Back
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="inline-flex size-10 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:border-slate-300 hover:text-ink"
+                aria-label="Close how it works"
+              >
+                <X className="size-4" />
               </button>
             </div>
+
+            <div className="mt-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-base">
+                How it works
+              </p>
+              <h3 className="mt-2 text-[1.9rem] font-semibold leading-[1] tracking-tight text-ink">
+                Create, share, finish.
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                Three short steps, centered in one quick overlay.
+              </p>
+            </div>
+
+            <div className="mt-5 grid gap-3">
+              {steps.map((step, index) => {
+                const Icon = step.icon;
+
+                return (
+                  <article
+                    key={step.title}
+                    className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] px-4 py-4 shadow-[0_10px_24px_rgba(5,5,5,0.04)]"
+                  >
+                    <div className="flex flex-col items-center text-center">
+                      <div className="inline-flex size-10 items-center justify-center rounded-2xl bg-white text-base shadow-sm ring-1 ring-slate-200">
+                        <Icon className="size-4" />
+                      </div>
+                      <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
+                        0{index + 1}
+                      </p>
+                      <h4 className="mt-1 text-[1.1rem] font-semibold leading-[1.1] tracking-tight text-base">
+                        {step.title}
+                      </h4>
+                      <p className="mt-2 max-w-[18rem] text-sm leading-6 text-muted">{step.copy}</p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-base px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(0,82,255,0.22)]"
+            >
+              Back to the app
+            </button>
           </div>
         </div>
       ) : null}
