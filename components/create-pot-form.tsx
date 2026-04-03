@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -193,9 +193,6 @@ export function CreatePotForm() {
                 Keep it short, clear, and ready to share inside Base App or any group chat.
               </p>
             </div>
-            <div className="inline-flex rounded-full bg-mist px-4 py-2 text-sm font-semibold text-base">
-              {targetChain.name}
-            </div>
           </div>
 
           <div className="mt-6 grid gap-4 sm:mt-8 sm:gap-5">
@@ -364,3 +361,5 @@ export function CreatePotForm() {
     </div>
   );
 }
+
+
