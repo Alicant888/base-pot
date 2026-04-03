@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { ArrowRight, CircleDollarSign, Clock3, ShieldCheck } from "lucide-react";
@@ -29,6 +30,27 @@ export function HomeFlow() {
     return (
       <div className="flex min-h-[calc(100svh-5.5rem)] items-center justify-center lg:min-h-[calc(100svh-7rem)]">
         <section className="w-full max-w-md">
+          <div className="mb-4 flex items-center justify-center">
+            <div className="inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white/84 px-4 py-3 shadow-panel backdrop-blur">
+              <span className="inline-flex size-11 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_6px_18px_rgba(5,5,5,0.06)]">
+                <Image
+                  src="/brand/logo.png"
+                  alt="Base Pot logo"
+                  width={34}
+                  height={34}
+                  className="size-[34px] object-contain"
+                  priority
+                />
+              </span>
+              <div className="text-left">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
+                  Base-native pot
+                </p>
+                <p className="text-lg font-semibold tracking-tight text-ink">Base Pot</p>
+              </div>
+            </div>
+          </div>
+
           <WalletPanel compact />
         </section>
       </div>
