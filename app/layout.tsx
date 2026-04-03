@@ -12,6 +12,11 @@ import "@/app/globals.css";
 export const metadata: Metadata = {
   title: "Base Pot",
   description: "One-link USDC collection pots on Base.",
+  icons: {
+    icon: "/brand/favicon.png",
+    shortcut: "/brand/favicon.png",
+    apple: "/brand/favicon.png",
+  },
   other: {
     "base:app_id": "69ce02b12cecb99f8ef27a40",
   },
