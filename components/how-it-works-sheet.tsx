@@ -1,8 +1,7 @@
 ﻿"use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { CircleDollarSign, Clock3, Share2, X } from "lucide-react";
+import { CircleDollarSign, Clock3, Share2 } from "lucide-react";
 
 const steps = [
   {
@@ -66,31 +65,7 @@ export function HowItWorksSheet() {
             className="flex w-full max-w-md max-h-[min(42rem,calc(100svh-2rem))] flex-col overflow-hidden rounded-[32px] bg-white/96 backdrop-blur sm:max-w-lg"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-4 py-4 sm:px-6">
-              <div className="flex items-center gap-3">
-                <span className="inline-flex size-10 items-center justify-center rounded-2xl border border-slate-200 bg-white shadow-[0_6px_18px_rgba(5,5,5,0.06)]">
-                  <Image
-                    src="/brand/logo.png"
-                    alt="Base Pot logo"
-                    width={32}
-                    height={32}
-                    className="size-8 object-contain"
-                  />
-                </span>
-                <span className="text-lg font-semibold tracking-tight text-ink">Base Pot</span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="inline-flex size-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:text-ink"
-                aria-label="Close how it works"
-              >
-                <X className="size-4" />
-              </button>
-            </div>
-
-            <div className="overflow-y-auto px-4 py-1 sm:px-6 sm:py-2">
+            <div className="overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
               <div className="text-center">
                 <h3 className="text-[1.9rem] font-semibold leading-[1] tracking-tight text-ink sm:text-[2.2rem]">
                   Create, share, finish.
