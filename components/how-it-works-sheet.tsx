@@ -94,7 +94,7 @@ export function HowItWorksSheet() {
                 onClick={() => setOpen(false)}
                 className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-base px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_32px_rgba(0,82,255,0.22)]"
               >
-                Back to the app
+                Back
               </button>
             </div>
           </div>
@@ -103,3 +103,4 @@ export function HowItWorksSheet() {
     </>
   );
 }
+
