@@ -58,14 +58,14 @@ export function HowItWorksSheet() {
 
       {open ? (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-[radial-gradient(circle_at_top_left,rgba(0,82,255,0.08),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(247,249,253,0.98)_100%)] px-4 pb-6 pt-3 sm:items-center sm:py-6"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-[linear-gradient(180deg,rgba(255,255,255,0.99)_0%,rgba(247,249,253,0.99)_100%)] px-4 pb-4 pt-0 sm:items-center sm:bg-slate-950/24 sm:px-4 sm:py-6"
           onClick={() => setOpen(false)}
         >
           <div
-            className="flex w-full max-w-md max-h-[min(42rem,calc(100svh-1rem))] flex-col overflow-hidden rounded-[32px] bg-white/96 backdrop-blur sm:max-w-lg"
+            className="flex w-full max-w-md max-h-[calc(100svh-0.5rem)] flex-col overflow-hidden rounded-[32px] bg-transparent backdrop-blur sm:max-w-lg"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
+            <div className="overflow-y-auto px-4 py-2 sm:px-6 sm:py-6">
               <div className="grid gap-3 sm:gap-4">
                 {steps.map((step, index) => {
                   const Icon = step.icon;
@@ -103,6 +103,3 @@ export function HowItWorksSheet() {
     </>
   );
 }
-
-
-
