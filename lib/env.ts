@@ -1,4 +1,4 @@
-import { z } from "zod";
+﻿import { z } from "zod";
 
 import { APP_NAME, ZERO_ADDRESS } from "@/lib/constants";
 
@@ -13,6 +13,7 @@ const publicEnvSchema = z.object({
   NEXT_PUBLIC_POT_CONTRACT_ADDRESS: z.string().default(ZERO_ADDRESS),
   NEXT_PUBLIC_USDC_ADDRESS: z.string().default(ZERO_ADDRESS),
   NEXT_PUBLIC_DEPLOY_BLOCK: z.coerce.number().int().min(0).default(0),
+  NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: z.string().min(1).optional(),
 });
 
 const serverEnvSchema = z.object({
@@ -34,6 +35,8 @@ export const publicEnv = publicEnvSchema.parse({
     process.env.NEXT_PUBLIC_POT_CONTRACT_ADDRESS,
   NEXT_PUBLIC_USDC_ADDRESS: process.env.NEXT_PUBLIC_USDC_ADDRESS,
   NEXT_PUBLIC_DEPLOY_BLOCK: process.env.NEXT_PUBLIC_DEPLOY_BLOCK,
+  NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID:
+    process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
 });
 
 export const serverEnv = serverEnvSchema.parse({
@@ -43,4 +46,3 @@ export const serverEnv = serverEnvSchema.parse({
 export const isDeploymentConfigured =
   publicEnv.NEXT_PUBLIC_POT_CONTRACT_ADDRESS !== ZERO_ADDRESS &&
   publicEnv.NEXT_PUBLIC_USDC_ADDRESS !== ZERO_ADDRESS;
-
