@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startTransition, useMemo, useState } from "react";
-import { ArrowLeft, CheckCircle2, Link2, Sparkles } from "lucide-react";
+import { ArrowLeft, Link2, Sparkles } from "lucide-react";
 import { decodeEventLog } from "viem";
 import { useAccount, usePublicClient, useSwitchChain, useWriteContract } from "wagmi";
 import { z } from "zod";
@@ -181,129 +181,104 @@ export function CreatePotForm() {
           onSubmit={handleSubmit}
           className="rounded-[30px] border border-slate-200 bg-white/96 p-5 shadow-panel backdrop-blur sm:rounded-[36px] sm:p-8"
         >
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted sm:text-xs">
-                Pot details
-              </p>
-              <h2 className="mt-2 text-[clamp(1.9rem,7vw,3rem)] font-semibold leading-[0.96] tracking-tight text-ink">
-                Create the link people will open.
-              </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-muted sm:text-base sm:leading-7">
-                Keep it short, clear, and ready to share inside Base App or any group chat.
-              </p>
+          <section className="rounded-[24px] border border-slate-200 bg-slate-50/85 p-4 sm:p-5">
+            <div className="flex items-center gap-2 text-sm font-semibold text-ink">
+              <Sparkles className="size-4 text-base" />
+              Setup
             </div>
-          </div>
 
-          <div className="mt-6 grid gap-4 sm:mt-8 sm:gap-5">
-            <section className="rounded-[24px] border border-slate-200 bg-slate-50/85 p-4 sm:p-5">
-              <div className="flex items-center gap-2 text-sm font-semibold text-ink">
-                <Sparkles className="size-4 text-base" />
-                Basics
-              </div>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              <label className="md:col-span-2">
+                <span className="text-sm font-semibold">Title</span>
+                <input
+                  value={form.title}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, title: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
+                  placeholder="Lisbon team trip"
+                />
+              </label>
 
-              <div className="mt-4 grid gap-4">
-                <label>
-                  <span className="text-sm font-semibold">Title</span>
-                  <input
-                    value={form.title}
-                    onChange={(event) =>
-                      setForm((current) => ({ ...current, title: event.target.value }))
-                    }
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                    placeholder="Lisbon team trip"
-                  />
-                </label>
+              <label className="md:col-span-2">
+                <span className="text-sm font-semibold">Short description</span>
+                <input
+                  value={form.description}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, description: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
+                  placeholder="Collecting USDC for the apartment deposit and shared transfers."
+                />
+              </label>
 
-                <label>
-                  <span className="text-sm font-semibold">Short description</span>
-                  <textarea
-                    value={form.description}
-                    onChange={(event) =>
-                      setForm((current) => ({ ...current, description: event.target.value }))
-                    }
-                    className="mt-2 min-h-28 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                    placeholder="Collecting USDC for the apartment deposit and shared transfers."
-                  />
-                </label>
-              </div>
-            </section>
+              <label>
+                <span className="text-sm font-semibold">Goal amount (USDC)</span>
+                <input
+                  value={form.goalAmount}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, goalAmount: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
+                  placeholder="200"
+                />
+              </label>
 
-            <section className="rounded-[24px] border border-slate-200 bg-slate-50/85 p-4 sm:p-5">
-              <div className="flex items-center gap-2 text-sm font-semibold text-ink">
-                <CheckCircle2 className="size-4 text-base" />
-                Setup
-              </div>
+              <label>
+                <span className="text-sm font-semibold">Deadline</span>
+                <input
+                  type="datetime-local"
+                  value={form.deadline}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, deadline: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
+                />
+              </label>
 
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
-                <label>
-                  <span className="text-sm font-semibold">Goal amount (USDC)</span>
-                  <input
-                    value={form.goalAmount}
-                    onChange={(event) =>
-                      setForm((current) => ({ ...current, goalAmount: event.target.value }))
-                    }
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                    placeholder="200"
-                  />
-                </label>
+              <label className="md:col-span-2">
+                <span className="text-sm font-semibold">Recipient address</span>
+                <input
+                  value={form.recipientAddress}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      recipientAddress: event.target.value,
+                    }))
+                  }
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm outline-none transition focus:border-base"
+                  placeholder="0x..."
+                />
+              </label>
 
-                <label>
-                  <span className="text-sm font-semibold">Deadline</span>
-                  <input
-                    type="datetime-local"
-                    value={form.deadline}
-                    onChange={(event) =>
-                      setForm((current) => ({ ...current, deadline: event.target.value }))
-                    }
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                  />
-                </label>
+              <label>
+                <span className="text-sm font-semibold">Suggested contribution</span>
+                <input
+                  value={form.suggestedContribution}
+                  onChange={(event) =>
+                    setForm((current) => ({
+                      ...current,
+                      suggestedContribution: event.target.value,
+                    }))
+                  }
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
+                  placeholder="25"
+                />
+              </label>
 
-                <label className="md:col-span-2">
-                  <span className="text-sm font-semibold">Recipient address</span>
-                  <input
-                    value={form.recipientAddress}
-                    onChange={(event) =>
-                      setForm((current) => ({
-                        ...current,
-                        recipientAddress: event.target.value,
-                      }))
-                    }
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm outline-none transition focus:border-base"
-                    placeholder="0x..."
-                  />
-                </label>
-
-                <label>
-                  <span className="text-sm font-semibold">Suggested contribution</span>
-                  <input
-                    value={form.suggestedContribution}
-                    onChange={(event) =>
-                      setForm((current) => ({
-                        ...current,
-                        suggestedContribution: event.target.value,
-                      }))
-                    }
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                    placeholder="25"
-                  />
-                </label>
-
-                <label>
-                  <span className="text-sm font-semibold">Emoji</span>
-                  <input
-                    value={form.emoji}
-                    onChange={(event) =>
-                      setForm((current) => ({ ...current, emoji: event.target.value }))
-                    }
-                    className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                    placeholder="*"
-                  />
-                </label>
-              </div>
-            </section>
-          </div>
+              <label>
+                <span className="text-sm font-semibold">Emoji</span>
+                <input
+                  value={form.emoji}
+                  onChange={(event) =>
+                    setForm((current) => ({ ...current, emoji: event.target.value }))
+                  }
+                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
+                  placeholder="*"
+                />
+              </label>
+            </div>
+          </section>
 
           <div className="mt-6 rounded-[24px] border border-slate-200 bg-white p-4 sm:mt-8 sm:p-5">
             <div className="flex items-center gap-2 text-sm font-semibold text-ink">
@@ -361,5 +336,3 @@ export function CreatePotForm() {
     </div>
   );
 }
-
-
