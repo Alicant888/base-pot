@@ -1,4 +1,4 @@
-﻿# Base Pot
+# Base Pot
 
 Base Pot is a local MVP for one-link USDC collections on Base.
 
@@ -191,10 +191,11 @@ that runs:
 pnpm vercel-build
 ```
 
-That build command generates the Prisma client, applies the schema with `prisma db push`,
-and then runs `next build`.
+That build command generates the Prisma client and then runs `next build`.
 
 Set these environment variables in Vercel before the first deploy:
+
+Apply Prisma schema changes outside the build step, for example from your local machine with corepack pnpm prisma:push against the production database, or with a separate migration workflow.
 
 - `DATABASE_URL`
 - `NEXT_PUBLIC_APP_URL`
@@ -243,5 +244,7 @@ node scripts/run-foundry.mjs test
 - Pot activity on the `/pot/[slug]` page is derived from onchain contract events, and the client refreshes that server feed after successful writes.
 - Optional wagmi connector peers are aliased out in `next.config.ts`, so builds stay clean while the app uses only Base Account plus the injected wallet flow.
 - Base Account capability checks are loaded on demand after wallet connection instead of inflating the initial pot page bundle.
-- Prisma client generation is validated. For this MVP, `prisma:push` is the fastest path locally and is also what the Vercel build runs before `next build`.
+- Prisma client generation is validated. For this MVP, `prisma:push` is the fastest path locally. In production, apply schema changes separately instead of mutating the database during the Vercel build.
 - The remaining build warning is unrelated to bundle size: Next.js still reports that the current flat ESLint config does not register the Next ESLint plugin explicitly.
+
+

@@ -13,7 +13,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:push": "prisma db push",
-    "vercel-build": "prisma generate && prisma db push && next build",
+    "vercel-build": "prisma generate && next build",
     "contracts:build": "node scripts/run-foundry.mjs build",
     "contracts:test": "node scripts/run-foundry.mjs test",
     "contracts:deploy": "node scripts/run-foundry.mjs deploy-local",
