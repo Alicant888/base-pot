@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 import { targetChain } from "@/lib/chains";
@@ -14,13 +14,47 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
   const { address, chainId, status, isConnected } = useAccount();
   const { connectors, connectAsync, isPending } = useConnect();
   const { disconnect } = useDisconnect();
+  const [availableConnectorIds, setAvailableConnectorIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function detectAvailability() {
+      const checks = await Promise.all(
+        connectors.map(async (connector) => {
+          if (connector.id !== "injected") {
+            return connector.id;
+          }
+
+          try {
+            const provider = await connector.getProvider();
+            return provider ? connector.id : null;
+          } catch {
+            return null;
+          }
+        }),
+      );
+
+      if (!cancelled) {
+        setAvailableConnectorIds(checks.filter((id): id is string => Boolean(id)));
+      }
+    }
+
+    void detectAvailability();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [connectors]);
 
   const orderedConnectors = useMemo(
     () =>
-      [...connectors].sort((left, right) =>
-        left.id === "baseAccount" ? -1 : right.id === "baseAccount" ? 1 : 0,
-      ),
-    [connectors],
+      [...connectors]
+        .filter((connector) => availableConnectorIds.includes(connector.id))
+        .sort((left, right) =>
+          left.id === "baseAccount" ? -1 : right.id === "baseAccount" ? 1 : 0,
+        ),
+    [availableConnectorIds, connectors],
   );
 
   if (isConnected) {
