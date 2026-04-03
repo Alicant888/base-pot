@@ -66,13 +66,7 @@ export function HowItWorksSheet() {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
-              <div className="text-center">
-                <h3 className="text-[1.9rem] font-semibold leading-[1] tracking-tight text-ink sm:text-[2.2rem]">
-                  Create, share, finish.
-                </h3>
-              </div>
-
-              <div className="mt-5 grid gap-3 sm:gap-4">
+              <div className="grid gap-3 sm:gap-4">
                 {steps.map((step, index) => {
                   const Icon = step.icon;
 
@@ -85,11 +79,8 @@ export function HowItWorksSheet() {
                         <div className="inline-flex size-10 items-center justify-center rounded-2xl bg-white text-base shadow-sm ring-1 ring-slate-200">
                           <Icon className="size-4" />
                         </div>
-                        <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
-                          0{index + 1}
-                        </p>
-                        <h4 className="mt-1 text-[1.1rem] font-semibold leading-[1.1] tracking-tight text-base">
-                          {step.title}
+                        <h4 className="mt-3 text-[1.1rem] font-semibold leading-[1.1] tracking-tight text-base">
+                          {index + 1}. {step.title}
                         </h4>
                         <p className="mt-2 max-w-[18rem] text-sm leading-6 text-muted">{step.copy}</p>
                       </div>
