@@ -58,7 +58,7 @@ export function HowItWorksSheet() {
 
       {open ? (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-slate-950/24 px-4 pb-6 pt-3 backdrop-blur-[3px] sm:items-center sm:py-6"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-[radial-gradient(circle_at_top_left,rgba(0,82,255,0.08),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(247,249,253,0.98)_100%)] px-4 pb-6 pt-3 sm:items-center sm:py-6"
           onClick={() => setOpen(false)}
         >
           <div
@@ -103,5 +103,6 @@ export function HowItWorksSheet() {
     </>
   );
 }
+
 
 
