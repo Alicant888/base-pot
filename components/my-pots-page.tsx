@@ -7,7 +7,7 @@ import { ArrowRight, History, Plus } from "lucide-react";
 import { useAccount } from "wagmi";
 
 import { WalletPanel } from "@/components/wallet-panel";
-import { formatDateTime } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/utils";
 
 type CreatedPot = {
   slug: string;
@@ -17,6 +17,7 @@ type CreatedPot = {
   goalAmount: string;
   deadline: string;
   createdAt: string;
+  isFunded: boolean;
 };
 
 type ContributedPot = {
@@ -97,17 +98,7 @@ export function MyPotsPage() {
     <div className="mx-auto max-w-5xl space-y-6">
       <section className="rounded-[32px] border border-slate-200 bg-white/92 p-5 shadow-panel backdrop-blur sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-base">
-              My pots
-            </p>
-            <h1 className="mt-3 text-[clamp(2rem,7vw,3rem)] font-semibold leading-[0.95] tracking-tight text-ink">
-              Created and contributed.
-            </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
-              Keep your own pots and the ones you backed in one place.
-            </p>
-          </div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-base">My pots</p>
 
           <div className="flex flex-wrap gap-3">
             <Link
@@ -137,7 +128,6 @@ export function MyPotsPage() {
       <div className="grid gap-6 xl:grid-cols-2">
         <HistorySection
           title="Created"
-          subtitle="Pots you started"
           loading={loading}
           emptyText="You have not created any pots yet."
           items={data.created.map((item) => ({
@@ -148,12 +138,12 @@ export function MyPotsPage() {
             metaLeft: `Goal ${item.goalAmount} USDC`,
             metaRight: `Created ${formatDateTime(item.createdAt)}`,
             footer: `Deadline ${formatDateTime(item.deadline)}`,
+            badge: item.isFunded ? "Funded" : null,
           }))}
         />
 
         <HistorySection
           title="Contributed"
-          subtitle="Pots you already backed"
           loading={loading}
           emptyText="Your contributions will show up here after you chip in to a pot."
           items={data.contributed.map((item) => ({
@@ -166,6 +156,7 @@ export function MyPotsPage() {
             footer: item.deadline
               ? `Deadline ${formatDateTime(item.deadline)}`
               : `Contract pot #${item.onchainPotId}`,
+            badge: null,
           }))}
         />
       </div>
@@ -181,21 +172,20 @@ type HistoryCardItem = {
   metaLeft: string;
   metaRight: string;
   footer: string;
+  badge: string | null;
 };
 
 type HistorySectionProps = {
   title: string;
-  subtitle: string;
   loading: boolean;
   emptyText: string;
   items: HistoryCardItem[];
 };
 
-function HistorySection({ title, subtitle, loading, emptyText, items }: HistorySectionProps) {
+function HistorySection({ title, loading, emptyText, items }: HistorySectionProps) {
   return (
     <section className="rounded-[32px] border border-slate-200 bg-white p-5 shadow-panel sm:p-6">
       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-base">{title}</p>
-      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-ink">{subtitle}</h2>
 
       <div className="mt-5 space-y-4">
         {loading ? (
@@ -217,7 +207,21 @@ function HistorySection({ title, subtitle, loading, emptyText, items }: HistoryS
             <article key={item.key} className="rounded-[24px] border border-slate-200 bg-slate-50/75 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <h3 className="text-lg font-semibold tracking-tight text-ink">{item.title}</h3>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-lg font-semibold tracking-tight text-ink">{item.title}</h3>
+                    {item.badge ? (
+                      <span
+                        className={cn(
+                          "rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]",
+                          item.badge === "Funded"
+                            ? "bg-base/10 text-base"
+                            : "bg-slate-100 text-muted",
+                        )}
+                      >
+                        {item.badge}
+                      </span>
+                    ) : null}
+                  </div>
                   <p className="mt-2 text-sm leading-6 text-muted">{item.description}</p>
                 </div>
                 {item.href ? (

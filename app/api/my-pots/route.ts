@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 import { parseAbiItem } from "viem";
 import { z } from "zod";
 
+import { BASE_POT_ABI } from "@/lib/contracts";
 import { isDeploymentConfigured, publicEnv } from "@/lib/env";
 import { onchainPublicClient } from "@/lib/onchain-client";
+import { getOnchainPot } from "@/lib/onchain-pot";
 import { getPotsByOnchainIds, getPotsByOrganizerAddress } from "@/lib/pots";
+import { derivePotStatus } from "@/lib/pot-state";
 import { formatUsdc } from "@/lib/utils";
 
 const querySchema = z.object({
@@ -26,6 +29,8 @@ type ContributionHistoryItem = {
   goalAmount: string | null;
   deadline: string | null;
 };
+
+type CreatedPotRecord = Awaited<ReturnType<typeof getPotsByOrganizerAddress>>[number];
 
 async function getContributedPots(address: `0x${string}`): Promise<ContributionHistoryItem[]> {
   if (!isDeploymentConfigured) {
@@ -142,6 +147,74 @@ async function getContributedPots(address: `0x${string}`): Promise<ContributionH
   }
 }
 
+async function getContributionFallbackForCreatedPots(
+  address: `0x${string}`,
+  createdPots: CreatedPotRecord[],
+  existingPotIds: Set<number>,
+) {
+  if (!isDeploymentConfigured || createdPots.length === 0) {
+    return [] as ContributionHistoryItem[];
+  }
+
+  const contractAddress = publicEnv.NEXT_PUBLIC_POT_CONTRACT_ADDRESS as `0x${string}`;
+
+  const fallbackItems = await Promise.all(
+    createdPots
+      .filter((pot) => !existingPotIds.has(pot.onchainPotId))
+      .map(async (pot) => {
+        try {
+          const amount = (await onchainPublicClient.readContract({
+            address: contractAddress,
+            abi: BASE_POT_ABI,
+            functionName: "contributions",
+            args: [BigInt(pot.onchainPotId), address],
+          })) as bigint;
+
+          if (amount <= 0n) {
+            return null;
+          }
+
+          return {
+            onchainPotId: pot.onchainPotId,
+            contributedAmount: formatUsdc(amount),
+            occurredAt: pot.updatedAt.toISOString(),
+            txHash: pot.txHash,
+            slug: pot.slug,
+            title: pot.title,
+            description: pot.description,
+            goalAmount: pot.goalAmount,
+            deadline: pot.deadline.toISOString(),
+          } satisfies ContributionHistoryItem;
+        } catch (error) {
+          console.error("Failed to load fallback contribution", {
+            address,
+            potId: pot.onchainPotId,
+            error,
+          });
+          return null;
+        }
+      }),
+  );
+
+  return fallbackItems.flatMap((item) => (item ? [item] : []));
+}
+
+async function getCreatedFundingState(createdPots: CreatedPotRecord[]) {
+  if (!isDeploymentConfigured || createdPots.length === 0) {
+    return new Map<number, boolean>();
+  }
+
+  const entries = await Promise.all(
+    createdPots.map(async (pot) => {
+      const onchainPot = await getOnchainPot(pot.onchainPotId);
+      const status = derivePotStatus(onchainPot);
+      return [pot.onchainPotId, status === "FUNDED" || status === "FINALIZED"] as const;
+    }),
+  );
+
+  return new Map(entries);
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const parsed = querySchema.safeParse({ address: url.searchParams.get("address") });
@@ -151,11 +224,21 @@ export async function GET(request: Request) {
   }
 
   const address = parsed.data.address;
-
-  const [created, contributed] = await Promise.all([
-    getPotsByOrganizerAddress(address),
-    getContributedPots(address as `0x${string}`),
+  const created = await getPotsByOrganizerAddress(address);
+  const contributedFromLogs = await getContributedPots(address as `0x${string}`);
+  const [createdFundingState, contributedFallback] = await Promise.all([
+    getCreatedFundingState(created),
+    getContributionFallbackForCreatedPots(
+      address as `0x${string}`,
+      created,
+      new Set(contributedFromLogs.map((item) => item.onchainPotId)),
+    ),
   ]);
+
+  const contributed = [...contributedFromLogs, ...contributedFallback].sort(
+    (left, right) =>
+      new Date(right.occurredAt).getTime() - new Date(left.occurredAt).getTime(),
+  );
 
   return NextResponse.json({
     created: created.map((pot) => ({
@@ -166,6 +249,7 @@ export async function GET(request: Request) {
       goalAmount: pot.goalAmount,
       deadline: pot.deadline.toISOString(),
       createdAt: pot.createdAt.toISOString(),
+      isFunded: createdFundingState.get(pot.onchainPotId) ?? false,
     })),
     contributed,
   });

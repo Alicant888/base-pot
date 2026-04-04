@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useRouter } from "next/navigation";
 import { startTransition, useEffect, useState } from "react";
@@ -44,6 +44,11 @@ function summarizeCapabilities(baseCapabilities: Record<string, unknown> | null)
     .map(([key]) => key);
 
   return supported.length > 0 ? `Capabilities: ${supported.join(", ")}` : "Base Account connected";
+}
+
+function summarizeActionError(caught: unknown) {
+  console.error("Pot action failed", caught);
+  return "Error";
 }
 
 export function PotClient({ pot }: PotClientProps) {
@@ -166,9 +171,7 @@ export function PotClient({ pot }: PotClientProps) {
       setMessage(successText);
       return hash;
     } catch (caught) {
-      const nextMessage =
-        caught instanceof Error ? caught.message : "The transaction was rejected or failed.";
-      setError(nextMessage);
+      setError(summarizeActionError(caught));
       return null;
     }
   }
@@ -417,5 +420,8 @@ export function PotClient({ pot }: PotClientProps) {
     </div>
   );
 }
+
+
+
 
 
