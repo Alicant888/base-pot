@@ -397,7 +397,7 @@ function HistorySection({ title, loading, emptyText, items, onArchive }: History
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className="inline-flex w-[7.25rem] items-center justify-center rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink"
+                      className="inline-flex w-[7.25rem] items-center justify-center rounded-full border border-slate-200 px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink"
                     >
                       Open
                     </Link>
@@ -487,7 +487,7 @@ function ArchiveSection({ loading, emptyText, items, onRestore }: ArchiveSection
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className="inline-flex w-[7.25rem] items-center justify-center rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink"
+                      className="inline-flex w-[7.25rem] items-center justify-center rounded-full border border-slate-200 px-2.5 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink"
                     >
                       Open
                     </Link>
