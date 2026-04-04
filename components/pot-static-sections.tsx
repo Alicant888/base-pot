@@ -54,7 +54,14 @@ export function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
             </h1>
           </div>
         </div>
-        <StatusPill status={status} />
+        <div className="flex flex-col items-start gap-2">
+          <StatusPill status={status} />
+          {status === "REFUNDABLE" ? (
+            <span className="rounded-full bg-rose-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-rose-700">
+              Claimable
+            </span>
+          ) : null}
+        </div>
       </div>
 
       <p className="mt-5 max-w-2xl break-words text-base leading-7 text-muted [overflow-wrap:anywhere]">
