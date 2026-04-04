@@ -13,7 +13,8 @@ import {
 import { targetChain } from "@/lib/chains";
 import { BASE_POT_ABI, ERC20_ABI } from "@/lib/contracts";
 import { publicEnv } from "@/lib/env";
-import { derivePotStatus, type PotTuple } from "@/lib/pot-state";
+import { derivePotStatus, type PotStatus, type PotTuple } from "@/lib/pot-state";
+import { potStatusTextStyles } from "@/lib/pot-status-ui";
 import { formatUsdc, parseUsdc, shortAddress } from "@/lib/utils";
 
 type PotClientProps = {
@@ -90,12 +91,7 @@ export function PotClient({ pot }: PotClientProps) {
   const raisedAmount = potView?.[3] ?? 0n;
   const isOrganizer = address?.toLowerCase() === organizerAddress.toLowerCase();
   const canContribute = status === "ACTIVE" || status === "FUNDED";
-  const statusClassName =
-    status === "ACTIVE"
-      ? "text-emerald-600"
-      : status === "CANCELLED" || status === "REFUNDABLE"
-        ? "text-rose-600"
-        : "text-muted";
+  const statusClassName = potStatusTextStyles[status as PotStatus];
   const refundClaimed = status === "REFUNDABLE" && (contribution ?? 0n) === 0n;
 
   async function ensureTargetChain() {
@@ -380,6 +376,7 @@ export function PotClient({ pot }: PotClientProps) {
     </div>
   );
 }
+
 
 
 
