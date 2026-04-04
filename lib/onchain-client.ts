@@ -1,9 +1,10 @@
-﻿import { createPublicClient, http } from "viem";
+import { createPublicClient } from "viem";
 
 import { targetChain } from "@/lib/chains";
-import { publicEnv } from "@/lib/env";
+import { publicRpcUrls } from "@/lib/env";
+import { createRpcTransport } from "@/lib/rpc";
 
 export const onchainPublicClient = createPublicClient({
   chain: targetChain,
-  transport: http(publicEnv.NEXT_PUBLIC_RPC_URL),
+  transport: createRpcTransport(publicRpcUrls),
 });

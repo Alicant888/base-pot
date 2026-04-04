@@ -1,10 +1,13 @@
-﻿import { cookieStorage, createConfig, createStorage, http } from "wagmi";
+import { cookieStorage, createConfig, createStorage, http } from "wagmi";
 import { base, baseSepolia } from "wagmi/chains";
 import { baseAccount, injected, walletConnect } from "wagmi/connectors";
 
 import { BUILDER_CODE_DATA_SUFFIX } from "@/lib/builder-code";
 import { localBasePotChain, supportedChains } from "@/lib/chains";
-import { publicEnv } from "@/lib/env";
+import { publicEnv, publicRpcUrls } from "@/lib/env";
+import { createRpcTransport } from "@/lib/rpc";
+
+const targetChainTransport = createRpcTransport(publicRpcUrls);
 
 export function getConfig() {
   return createConfig({
@@ -35,9 +38,13 @@ export function getConfig() {
       storage: cookieStorage,
     }),
     transports: {
-      [localBasePotChain.id]: http(publicEnv.NEXT_PUBLIC_RPC_URL),
-      [base.id]: http(),
-      [baseSepolia.id]: http(),
+      [localBasePotChain.id]:
+        publicEnv.NEXT_PUBLIC_CHAIN_ID === localBasePotChain.id
+          ? targetChainTransport
+          : http(publicEnv.NEXT_PUBLIC_RPC_URL),
+      [base.id]: publicEnv.NEXT_PUBLIC_CHAIN_ID === base.id ? targetChainTransport : http(),
+      [baseSepolia.id]:
+        publicEnv.NEXT_PUBLIC_CHAIN_ID === baseSepolia.id ? targetChainTransport : http(),
     },
     dataSuffix: BUILDER_CODE_DATA_SUFFIX,
   });

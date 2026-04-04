@@ -90,6 +90,7 @@ It already includes the recorded Base Mainnet deployment values for:
 - `NEXT_PUBLIC_POT_CONTRACT_ADDRESS=0x239B43e2210984cC1b90a11F1B216fb3ccD37635`
 - `NEXT_PUBLIC_USDC_ADDRESS=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
 - `NEXT_PUBLIC_DEPLOY_BLOCK=44120371`
+- optional: `NEXT_PUBLIC_RPC_FALLBACK_URLS=https://rpc-2.example,https://rpc-3.example`
 
 ## Pot page architecture
 
@@ -195,7 +196,7 @@ That build command generates the Prisma client and then runs `next build`.
 
 Set these environment variables in Vercel before the first deploy:
 
-Apply Prisma schema changes outside the build step, for example from your local machine with corepack pnpm prisma:push against the production database, or with a separate migration workflow.
+Apply Prisma schema changes outside the build step, for example from your local machine with `corepack pnpm prisma:push` against the production database, or with a separate migration workflow.
 
 - `DATABASE_URL`
 - `NEXT_PUBLIC_APP_URL`
@@ -221,6 +222,7 @@ For full in-app Base App validation, deploy to Base Sepolia or Base Mainnet and 
 - `NEXT_PUBLIC_CHAIN_ID`
 - `NEXT_PUBLIC_CHAIN_NAME`
 - `NEXT_PUBLIC_RPC_URL`
+- optional: `NEXT_PUBLIC_RPC_FALLBACK_URLS` (comma-separated reserve RPC URLs)
 - `NEXT_PUBLIC_POT_CONTRACT_ADDRESS`
 - `NEXT_PUBLIC_USDC_ADDRESS`
 
@@ -246,5 +248,7 @@ node scripts/run-foundry.mjs test
 - Base Account capability checks are loaded on demand after wallet connection instead of inflating the initial pot page bundle.
 - Prisma client generation is validated. For this MVP, `prisma:push` is the fastest path locally. In production, apply schema changes separately instead of mutating the database during the Vercel build.
 - The remaining build warning is unrelated to bundle size: Next.js still reports that the current flat ESLint config does not register the Next ESLint plugin explicitly.
+
+
 
 
