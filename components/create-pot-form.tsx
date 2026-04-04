@@ -44,6 +44,22 @@ function slugifyTitle(title: string) {
     .slice(0, 48);
 }
 
+function formatDeadlineDisplay(deadline: string) {
+  const date = new Date(deadline);
+
+  if (Number.isNaN(date.getTime())) {
+    return deadline;
+  }
+
+  return new Intl.DateTimeFormat(undefined, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+}
+
 export function CreatePotForm() {
   const router = useRouter();
   const publicClient = usePublicClient({ chainId: targetChain.id });
@@ -59,6 +75,7 @@ export function CreatePotForm() {
     () => `/pot/${slugifyTitle(form.title || "team-pot")}-?`,
     [form.title],
   );
+  const deadlineDisplay = useMemo(() => formatDeadlineDisplay(form.deadline), [form.deadline]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -226,14 +243,19 @@ export function CreatePotForm() {
 
               <label className="min-w-0">
                 <span className="text-sm font-semibold">Deadline</span>
-                <input
-                  type="datetime-local"
-                  value={form.deadline}
-                  onChange={(event) =>
-                    setForm((current) => ({ ...current, deadline: event.target.value }))
-                  }
-                  className="mt-2 block min-w-0 w-full max-w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-base"
-                />
+                <span className="relative mt-2 block overflow-hidden rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-ink transition focus-within:border-base">
+                  <span className="block overflow-hidden text-ellipsis whitespace-nowrap pr-8">
+                    {deadlineDisplay}
+                  </span>
+                  <input
+                    type="datetime-local"
+                    value={form.deadline}
+                    onChange={(event) =>
+                      setForm((current) => ({ ...current, deadline: event.target.value }))
+                    }
+                    className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                  />
+                </span>
               </label>
 
               <label className="md:col-span-2">
