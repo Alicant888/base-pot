@@ -1,4 +1,4 @@
-﻿import { cache } from "react";
+import { cache } from "react";
 
 import { BASE_POT_ABI } from "@/lib/contracts";
 import { isDeploymentConfigured, publicEnv } from "@/lib/env";
@@ -10,10 +10,15 @@ export const getOnchainPot = cache(async (potId: number) => {
     return undefined;
   }
 
-  return (await onchainPublicClient.readContract({
-    address: publicEnv.NEXT_PUBLIC_POT_CONTRACT_ADDRESS as `0x${string}`,
-    abi: BASE_POT_ABI,
-    functionName: "getPot",
-    args: [BigInt(potId)],
-  })) as PotTuple;
+  try {
+    return (await onchainPublicClient.readContract({
+      address: publicEnv.NEXT_PUBLIC_POT_CONTRACT_ADDRESS as `0x${string}`,
+      abi: BASE_POT_ABI,
+      functionName: "getPot",
+      args: [BigInt(potId)],
+    })) as PotTuple;
+  } catch (error) {
+    console.error("Failed to load onchain pot", { potId, error });
+    return undefined;
+  }
 });
