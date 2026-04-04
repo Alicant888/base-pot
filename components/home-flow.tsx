@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { useAccount } from "wagmi";
-import { ArrowRight, CircleDollarSign, Clock3, ShieldCheck } from "lucide-react";
+import { ArrowRight, CircleDollarSign, Clock3, History, ShieldCheck } from "lucide-react";
 
 import { HowItWorksSheet } from "@/components/how-it-works-sheet";
 import { WalletPanel } from "@/components/wallet-panel";
@@ -46,8 +46,8 @@ export function HomeFlow() {
             Create the pot and share it.
           </h1>
           <p className="mt-3 text-sm leading-6 text-muted">
-            You are ready to start. Launch a new USDC pot in a few taps, or look through the flow
-            once before you begin.
+            You are ready to start. Launch a new USDC pot in a few taps, open your history, or look
+            through the flow once before you begin.
           </p>
 
           <div className="mt-5 grid gap-3">
@@ -57,6 +57,13 @@ export function HomeFlow() {
             >
               Create a pot
               <ArrowRight className="size-4" />
+            </Link>
+            <Link
+              href="/my-pots"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-ink"
+            >
+              <History className="size-4" />
+              My pots
             </Link>
             <HowItWorksSheet />
           </div>
@@ -75,8 +82,8 @@ export function HomeFlow() {
               Start the pot, then share one clean Base link.
             </h2>
             <p className="mt-4 max-w-xl text-base leading-7 text-muted">
-              The wallet is already connected, so the next move is simple: create the pot, set the
-              goal, and send a link that feels native inside the app.
+              The wallet is already connected, so the next move is simple: create the pot, open
+              your history, and send a link that feels native inside the app.
             </p>
           </div>
 
@@ -87,6 +94,13 @@ export function HomeFlow() {
             >
               Create a pot
               <ArrowRight className="size-4" />
+            </Link>
+            <Link
+              href="/my-pots"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-ink"
+            >
+              <History className="size-4" />
+              My pots
             </Link>
             <HowItWorksSheet />
           </div>
@@ -145,8 +159,8 @@ export function HomeFlow() {
                 </div>
                 <h3 className="mt-3 text-lg font-semibold tracking-tight">Fast next move</h3>
                 <p className="mt-2 text-sm leading-6 text-muted">
-                  Create the pot now, or open the short walkthrough and understand the flow in one
-                  glance.
+                  Create the pot now, open your history, or look through the flow and understand it
+                  in one glance.
                 </p>
               </article>
             </div>

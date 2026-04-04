@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Copy, House, Share2 } from "lucide-react";
+import { Copy, History, Share2 } from "lucide-react";
 
 type PotBottomBarProps = {
   slug: string;
@@ -50,11 +50,11 @@ export function PotBottomBar({ slug, title }: PotBottomBarProps) {
         {feedback ? <p className="px-2 pb-2 text-center text-sm text-muted">{feedback}</p> : null}
         <div className="grid grid-cols-3 gap-2">
           <Link
-            href="/"
+            href="/my-pots"
             className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 px-4 py-3 text-sm font-semibold text-ink"
           >
-            <House className="size-4" />
-            Back home
+            <History className="size-4" />
+            My pots
           </Link>
           <button
             type="button"

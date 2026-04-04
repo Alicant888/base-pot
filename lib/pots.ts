@@ -1,4 +1,4 @@
-﻿import { cache } from "react";
+import { cache } from "react";
 
 import { db } from "@/lib/db";
 import type { CreatePotMetadataInput } from "@/lib/validation/pot";
@@ -27,3 +27,31 @@ export const getPotBySlug = cache(async (slug: string) => {
     where: { slug },
   });
 });
+
+export async function getPotsByOrganizerAddress(address: string) {
+  return db.pot.findMany({
+    where: {
+      organizerAddress: {
+        equals: address,
+        mode: "insensitive",
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+}
+
+export async function getPotsByOnchainIds(onchainPotIds: number[]) {
+  if (onchainPotIds.length === 0) {
+    return [];
+  }
+
+  return db.pot.findMany({
+    where: {
+      onchainPotId: {
+        in: onchainPotIds,
+      },
+    },
+  });
+}
