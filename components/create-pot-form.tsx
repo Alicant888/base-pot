@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { startTransition, useMemo, useState } from "react";
-import { ArrowLeft, Link2, Sparkles } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 import { decodeEventLog } from "viem";
 import { useAccount, usePublicClient, useSwitchChain, useWriteContract } from "wagmi";
 import { z } from "zod";
@@ -324,15 +324,6 @@ export function CreatePotForm() {
             </div>
           </section>
 
-          <div className="mt-6 rounded-[24px] border border-slate-200 bg-white p-4 sm:mt-8 sm:p-5">
-            <div className="flex items-center gap-2 text-sm font-semibold text-ink">
-              <Link2 className="size-4 text-base" />
-              Share preview
-            </div>
-            <p className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap rounded-2xl bg-mist px-4 py-3 text-sm text-muted">
-              {sharePreview}
-            </p>
-          </div>
 
           <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:items-center sm:justify-between">
             <button
