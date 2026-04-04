@@ -50,7 +50,7 @@ export async function PotOverview({ pot, onchainPot, activity }: PotPageStaticPr
           </p>
           <div className="mt-3 flex min-w-0 items-start gap-3">
             {displayEmoji ? <span className="text-3xl">{displayEmoji}</span> : null}
-            <h1 className="min-w-0 max-w-full break-words text-3xl font-semibold tracking-tight [overflow-wrap:anywhere] sm:text-4xl">
+            <h1 className="min-w-0 max-w-full break-words text-[1.65rem] font-semibold tracking-tight [overflow-wrap:anywhere] sm:text-[2.1rem]">
               {pot.title}
             </h1>
           </div>
