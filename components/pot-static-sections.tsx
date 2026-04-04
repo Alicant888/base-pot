@@ -1,9 +1,10 @@
+import { ProgressBar } from "@/components/progress-bar";
+import { StatusPill } from "@/components/status-pill";
+import { targetChain } from "@/lib/chains";
+import { getBasenameMap } from "@/lib/basenames";
 import type { PotActivity } from "@/lib/onchain-activity";
 import type { PotTuple } from "@/lib/pot-state";
 import { derivePotStatus } from "@/lib/pot-state";
-import { targetChain } from "@/lib/chains";
-import { ProgressBar } from "@/components/progress-bar";
-import { StatusPill } from "@/components/status-pill";
 import {
   formatDateTime,
   formatRelativeDeadline,
@@ -30,7 +31,7 @@ type PotPageStaticProps = {
   };
 };
 
-export function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
+export async function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
   const displayEmoji = pot.emoji && pot.emoji !== "*" ? pot.emoji : null;
   const raisedAmount = onchainPot?.[3] ?? 0n;
   const goalAmount = onchainPot?.[2] ?? parseUsdc(pot.goalAmount);
@@ -95,8 +96,13 @@ export function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
   );
 }
 
-export function PotSidebarStatic({ pot, onchainPot, activity }: PotPageStaticProps) {
+export async function PotSidebarStatic({ pot, onchainPot, activity }: PotPageStaticProps) {
   const recipientAddress = (onchainPot?.[1] ?? pot.recipientAddress) as string;
+  const basenames = await getBasenameMap([
+    recipientAddress,
+    ...activity.activities.map((item) => item.actorAddress),
+  ]);
+  const recipientLabel = basenames.get(recipientAddress.toLowerCase()) ?? shortAddress(recipientAddress);
 
   return (
     <div className="space-y-6">
@@ -105,7 +111,9 @@ export function PotSidebarStatic({ pot, onchainPot, activity }: PotPageStaticPro
         <dl className="mt-4 space-y-4 text-sm">
           <div className="flex items-center justify-between gap-4">
             <dt className="text-muted">Recipient</dt>
-            <dd className="font-mono">{shortAddress(recipientAddress)}</dd>
+            <dd className="max-w-[13rem] break-words text-right font-medium [overflow-wrap:anywhere]" title={recipientAddress}>
+              {recipientLabel}
+            </dd>
           </div>
           <div className="flex items-center justify-between gap-4">
             <dt className="text-muted">Chain</dt>
@@ -128,20 +136,24 @@ export function PotSidebarStatic({ pot, onchainPot, activity }: PotPageStaticPro
         </p>
         <div className="mt-4 space-y-4">
           {activity.activities.length > 0 ? (
-            activity.activities.slice(0, 8).map((item) => (
-              <div key={item.id} className="rounded-2xl border border-slate-200 px-4 py-3 text-sm">
-                <div className="flex items-center justify-between gap-4">
-                  <p className="font-semibold">{item.type.replace("_", " ")}</p>
-                  <p className="text-xs uppercase tracking-[0.14em] text-muted">
-                    {formatDateTime(item.occurredAt)}
+            activity.activities.slice(0, 8).map((item) => {
+              const actorLabel = basenames.get(item.actorAddress.toLowerCase()) ?? shortAddress(item.actorAddress);
+
+              return (
+                <div key={item.id} className="rounded-2xl border border-slate-200 px-4 py-3 text-sm">
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="font-semibold">{item.type.replace("_", " ")}</p>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted">
+                      {formatDateTime(item.occurredAt)}
+                    </p>
+                  </div>
+                  <p className="mt-2 break-words text-muted [overflow-wrap:anywhere]" title={item.actorAddress}>
+                    {actorLabel}
+                    {item.amount ? ` | ${item.amount} USDC` : ""}
                   </p>
                 </div>
-                <p className="mt-2 text-muted">
-                  {shortAddress(item.actorAddress)}
-                  {item.amount ? ` | ${item.amount} USDC` : ""}
-                </p>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p className="text-sm text-muted">
               Activity appears here after successful contributions, refunds, or organizer actions.

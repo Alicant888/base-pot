@@ -10,12 +10,13 @@ import {
   useWriteContract,
 } from "wagmi";
 
+import { AddressLabel } from "@/components/address-label";
 import { targetChain } from "@/lib/chains";
 import { BASE_POT_ABI, ERC20_ABI } from "@/lib/contracts";
 import { publicEnv } from "@/lib/env";
 import { derivePotStatus, type PotStatus, type PotTuple } from "@/lib/pot-state";
 import { potStatusTextStyles } from "@/lib/pot-status-ui";
-import { formatUsdc, parseUsdc, shortAddress } from "@/lib/utils";
+import { formatUsdc, parseUsdc, safeParseUsdc } from "@/lib/utils";
 
 type PotClientProps = {
   pot: {
@@ -83,9 +84,11 @@ export function PotClient({ pot }: PotClientProps) {
 
   const potView = onchainPot as PotTuple | undefined;
   const status = derivePotStatus(potView);
-  const expectedAmount = contributionInput.trim() ? parseUsdc(contributionInput) : 0n;
-  const hasAllowance = (allowance ?? 0n) >= expectedAmount;
-  const hasEnoughBalance = (balance ?? 0n) >= expectedAmount;
+  const expectedAmount = safeParseUsdc(contributionInput);
+  const isContributionAmountValid = expectedAmount !== null;
+  const contributionAmount = expectedAmount ?? 0n;
+  const hasAllowance = (allowance ?? 0n) >= contributionAmount;
+  const hasEnoughBalance = (balance ?? 0n) >= contributionAmount;
   const organizerAddress = (potView?.[0] ?? pot.organizerAddress) as string;
   const goalAmount = potView?.[2] ?? parseUsdc(pot.goalAmount);
   const raisedAmount = potView?.[3] ?? 0n;
@@ -134,7 +137,7 @@ export function PotClient({ pot }: PotClientProps) {
   }
 
   async function handleApprove() {
-    if (expectedAmount <= 0n) {
+    if (!isContributionAmountValid || contributionAmount <= 0n) {
       setError("Enter a contribution amount first.");
       return;
     }
@@ -146,7 +149,7 @@ export function PotClient({ pot }: PotClientProps) {
           abi: ERC20_ABI,
           functionName: "approve",
           chainId: targetChain.id,
-          args: [contractAddress, expectedAmount],
+          args: [contractAddress, contributionAmount],
         }),
       "USDC approval confirmed.",
     );
@@ -177,7 +180,7 @@ export function PotClient({ pot }: PotClientProps) {
       return;
     }
 
-    if (expectedAmount <= 0n) {
+    if (!isContributionAmountValid || contributionAmount <= 0n) {
       setError("Enter a valid USDC amount.");
       return;
     }
@@ -189,7 +192,7 @@ export function PotClient({ pot }: PotClientProps) {
           abi: BASE_POT_ABI,
           functionName: "contribute",
           chainId: targetChain.id,
-          args: [potId, expectedAmount],
+          args: [potId, contributionAmount],
         }),
       "Contribution received.",
     );
@@ -289,7 +292,7 @@ export function PotClient({ pot }: PotClientProps) {
             </label>
             <button
               onClick={handleApprove}
-              disabled={!isConnected || expectedAmount <= 0n || isWriting || isSwitching}
+              disabled={!isConnected || !isContributionAmountValid || contributionAmount <= 0n || isWriting || isSwitching}
               className="self-end rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold disabled:opacity-50"
             >
               {hasAllowance ? "Approved" : "Approve USDC"}
@@ -335,7 +338,7 @@ export function PotClient({ pot }: PotClientProps) {
               Finalize a success or open refunds
             </h2>
           </div>
-          <div className="text-sm text-muted">Organizer: {shortAddress(organizerAddress)}</div>
+          <div className="text-sm text-muted">Organizer: <AddressLabel address={organizerAddress} className="font-medium text-ink" /></div>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">

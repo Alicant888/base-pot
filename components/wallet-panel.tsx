@@ -1,10 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 
+import { AddressLabel } from "@/components/address-label";
 import { targetChain } from "@/lib/chains";
-import { shortAddress } from "@/lib/utils";
 
 type WalletPanelProps = {
   compact?: boolean;
@@ -91,7 +91,9 @@ export function WalletPanel({ compact = false }: WalletPanelProps) {
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
               Connected
             </p>
-            <p className="mt-1 text-sm font-semibold">{shortAddress(address)}</p>
+            <p className="mt-1 text-sm font-semibold">
+              <AddressLabel address={address} />
+            </p>
             <p className="mt-1 text-sm text-muted">
               {chainId === targetChain.id
                 ? `Ready on ${targetChain.name}`

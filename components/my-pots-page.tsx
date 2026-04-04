@@ -410,8 +410,7 @@ function HistorySection({ title, loading, emptyText, items, onArchive }: History
                   {item.badge ? (
                     <span
                       className={cn(
-                        "rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]",
-                        item.badge === "FINALIZED" ? "px-2 text-[10px] tracking-[0.06em]" : null,
+                        "inline-flex w-[7.25rem] justify-center rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em]",
                         potStatusChipStyles[item.badge],
                       )}
                     >
@@ -477,7 +476,7 @@ function ArchiveSection({ loading, emptyText, items, onRestore }: ArchiveSection
                   {item.badge ? (
                     <span
                       className={cn(
-                        "mt-3 inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]",
+                        "mt-3 inline-flex w-[7.25rem] justify-center rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em]",
                         potStatusChipStyles[item.badge],
                       )}
                     >

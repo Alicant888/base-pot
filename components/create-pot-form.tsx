@@ -12,7 +12,7 @@ import { WalletPanel } from "@/components/wallet-panel";
 import { targetChain } from "@/lib/chains";
 import { BASE_POT_ABI } from "@/lib/contracts";
 import { isDeploymentConfigured, publicEnv } from "@/lib/env";
-import { parseUsdc } from "@/lib/utils";
+import { safeParseUsdc } from "@/lib/utils";
 
 const formSchema = z.object({
   title: z.string().trim().min(3).max(80),
@@ -156,7 +156,10 @@ export function CreatePotForm() {
       }
 
       const deadlineIso = new Date(parsed.data.deadline).toISOString();
-      const goalAmount = parseUsdc(parsed.data.goalAmount);
+      const goalAmount = safeParseUsdc(parsed.data.goalAmount);
+      if (goalAmount === null || goalAmount <= 0n) {
+        throw new Error("Enter a valid goal amount.");
+      }
       const deadlineSeconds = Math.floor(new Date(deadlineIso).getTime() / 1000);
 
       const hash = await writeContractAsync({

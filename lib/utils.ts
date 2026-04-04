@@ -16,9 +16,45 @@ export function formatUsdc(value: bigint, digits = 2) {
   }).format(formatted);
 }
 
+function normalizeUsdcInput(value: string) {
+  const trimmed = value.trim().replace(/,/g, ".");
+
+  if (!trimmed) {
+    return "";
+  }
+
+  if (trimmed.startsWith(".")) {
+    return `0${trimmed}`;
+  }
+
+  if (trimmed.endsWith(".")) {
+    return trimmed.slice(0, -1);
+  }
+
+  return trimmed;
+}
+
 export function parseUsdc(value: string) {
-  const normalized = value.trim() || "0";
+  const normalized = normalizeUsdcInput(value) || "0";
   return parseUnits(normalized, USDC_DECIMALS);
+}
+
+export function safeParseUsdc(value: string) {
+  const normalized = normalizeUsdcInput(value);
+
+  if (!normalized) {
+    return 0n;
+  }
+
+  if (!/^\d+(?:\.\d{0,6})?$/.test(normalized)) {
+    return null;
+  }
+
+  try {
+    return parseUnits(normalized, USDC_DECIMALS);
+  } catch {
+    return null;
+  }
 }
 
 export function shortAddress(address?: string | null) {
