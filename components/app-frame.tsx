@@ -11,7 +11,7 @@ type AppFrameProps = {
 
 export function AppFrame({ children }: AppFrameProps) {
   const pathname = usePathname();
-  const hideHeader = pathname === "/create";
+  const hideHeader = pathname === "/create" || pathname === "/my-pots" || pathname.startsWith("/pot/");
   const mainClassName = hideHeader
     ? "mx-auto max-w-7xl px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4"
     : "mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8";
