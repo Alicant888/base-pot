@@ -96,6 +96,7 @@ export function PotClient({ pot }: PotClientProps) {
       : status === "CANCELLED" || status === "REFUNDABLE"
         ? "text-rose-600"
         : "text-muted";
+  const refundClaimed = status === "REFUNDABLE" && (contribution ?? 0n) === 0n;
 
   async function ensureTargetChain() {
     if (chainId !== targetChain.id) {
@@ -314,7 +315,7 @@ export function PotClient({ pot }: PotClientProps) {
           <span>Your refundable amount: {formatUsdc(contribution ?? 0n)} USDC</span>
         </div>
 
-        {targetChain.id === 31337 && (!hasEnoughBalance || balance === 0n) ? (
+        {targetChain.id === 31337 && canContribute && (!hasEnoughBalance || balance === 0n) ? (
           <button
             onClick={handleMint}
             disabled={!isConnected || isWriting || isSwitching}
@@ -372,13 +373,14 @@ export function PotClient({ pot }: PotClientProps) {
             }
             className="rounded-full border border-rose-200 bg-rose-50 px-5 py-3 text-sm font-semibold text-rose-700 disabled:opacity-50"
           >
-            Claim refund
+            {refundClaimed ? "Claimed" : "Claim refund"}
           </button>
         </div>
       </section>
     </div>
   );
 }
+
 
 
 
