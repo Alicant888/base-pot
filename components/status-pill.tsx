@@ -12,6 +12,7 @@ export function StatusPill({ status, label }: StatusPillProps) {
     <span
       className={cn(
         "inline-flex rounded-full px-3 py-1 text-xs font-semibold tracking-[0.18em] ring-1",
+        status === "FINALIZED" ? "px-2.5 text-[11px] tracking-[0.12em]" : null,
         potStatusBadgeStyles[status],
       )}
     >
