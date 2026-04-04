@@ -43,19 +43,23 @@ export function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
   return (
     <section className="rounded-[36px] border border-slate-200 bg-white p-6 shadow-panel sm:p-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
+        <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
             Share-ready pot
           </p>
-          <div className="mt-3 flex items-center gap-3">
+          <div className="mt-3 flex min-w-0 items-start gap-3">
             {displayEmoji ? <span className="text-3xl">{displayEmoji}</span> : null}
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{pot.title}</h1>
+            <h1 className="min-w-0 max-w-full break-words text-3xl font-semibold tracking-tight [overflow-wrap:anywhere] sm:text-4xl">
+              {pot.title}
+            </h1>
           </div>
         </div>
         <StatusPill status={status} />
       </div>
 
-      <p className="mt-5 max-w-2xl text-base leading-7 text-muted">{pot.description}</p>
+      <p className="mt-5 max-w-2xl break-words text-base leading-7 text-muted [overflow-wrap:anywhere]">
+        {pot.description}
+      </p>
 
       <div className="mt-8 grid gap-5 rounded-[28px] border border-slate-200 bg-slate-50/70 p-5 sm:grid-cols-4">
         <div>
@@ -80,9 +84,9 @@ export function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
 
       <div className="mt-6">
         <ProgressBar value={progress} />
-        <div className="mt-2 flex justify-between text-sm text-muted">
+        <div className="mt-2 flex justify-between gap-4 text-sm text-muted">
           <span>{progress.toFixed(1)}% of target</span>
-          <span>{formatDateTime(deadline)}</span>
+          <span className="break-words text-right [overflow-wrap:anywhere]">{formatDateTime(deadline)}</span>
         </div>
       </div>
     </section>
@@ -146,5 +150,3 @@ export function PotSidebarStatic({ pot, onchainPot, activity }: PotPageStaticPro
     </div>
   );
 }
-
-

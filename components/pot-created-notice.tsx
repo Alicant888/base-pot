@@ -60,10 +60,10 @@ export function PotCreatedNotice({ slug, title }: PotCreatedNoticeProps) {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-base">Pot created</p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink">
+          <h2 className="mt-2 break-words text-2xl font-semibold tracking-tight text-ink [overflow-wrap:anywhere]">
             Link ready to share.
           </h2>
-          <p className="mt-2 text-sm leading-6 text-muted">
+          <p className="mt-2 break-words text-sm leading-6 text-muted [overflow-wrap:anywhere]">
             Your pot is live. Share the link now, or continue into the pot page.
           </p>
           <p className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap rounded-2xl bg-white px-4 py-3 text-sm text-muted ring-1 ring-slate-200">
