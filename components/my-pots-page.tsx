@@ -3,7 +3,7 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Archive, ArrowRight, History, Plus, Undo2 } from "lucide-react";
+import { Archive, History, Plus, Undo2 } from "lucide-react";
 import { useAccount } from "wagmi";
 
 import { WalletPanel } from "@/components/wallet-panel";
@@ -397,13 +397,12 @@ function HistorySection({ title, loading, emptyText, items, onArchive }: History
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className="inline-flex items-center justify-center gap-1 rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-ink"
+                      className="inline-flex w-[7.25rem] items-center justify-center rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink"
                     >
                       Open
-                      <ArrowRight className="size-4" />
                     </Link>
                   ) : (
-                    <span className="rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-muted">
+                    <span className="inline-flex w-[7.25rem] items-center justify-center rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">
                       No link yet
                     </span>
                   )}
@@ -488,10 +487,9 @@ function ArchiveSection({ loading, emptyText, items, onRestore }: ArchiveSection
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className="inline-flex items-center justify-center gap-1 rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-ink"
+                      className="inline-flex w-[7.25rem] items-center justify-center rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-ink"
                     >
                       Open
-                      <ArrowRight className="size-4" />
                     </Link>
                   ) : null}
                   <button
