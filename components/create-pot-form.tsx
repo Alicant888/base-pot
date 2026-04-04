@@ -199,7 +199,7 @@ export function CreatePotForm() {
           onSubmit={handleSubmit}
           className="rounded-[30px] border border-slate-200 bg-white/96 p-5 shadow-panel backdrop-blur sm:rounded-[36px] sm:p-8"
         >
-          <section className="rounded-[24px] border border-slate-200 bg-slate-50/85 p-4 sm:p-5">
+          <section>
             <div className="flex items-center gap-2 text-sm font-semibold text-ink">
               <Sparkles className="size-4 text-base" />
               Setup
@@ -348,3 +348,4 @@ export function CreatePotForm() {
     </div>
   );
 }
+
