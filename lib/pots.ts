@@ -55,3 +55,12 @@ export async function getPotsByOnchainIds(onchainPotIds: number[]) {
     },
   });
 }
+
+export async function getRecentPots(limit = 200) {
+  return db.pot.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: limit,
+  });
+}

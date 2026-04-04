@@ -6,7 +6,11 @@ import { BASE_POT_ABI } from "@/lib/contracts";
 import { isDeploymentConfigured, publicEnv } from "@/lib/env";
 import { onchainPublicClient } from "@/lib/onchain-client";
 import { getOnchainPot } from "@/lib/onchain-pot";
-import { getPotsByOnchainIds, getPotsByOrganizerAddress } from "@/lib/pots";
+import {
+  getPotsByOnchainIds,
+  getPotsByOrganizerAddress,
+  getRecentPots,
+} from "@/lib/pots";
 import { derivePotStatus, type PotStatus } from "@/lib/pot-state";
 import { formatUsdc } from "@/lib/utils";
 
@@ -31,7 +35,7 @@ type ContributionHistoryItem = {
   status: PotStatus;
 };
 
-type CreatedPotRecord = Awaited<ReturnType<typeof getPotsByOrganizerAddress>>[number];
+type KnownPotRecord = Awaited<ReturnType<typeof getRecentPots>>[number];
 
 async function getContributedPots(address: `0x${string}`): Promise<Omit<ContributionHistoryItem, "status">[]> {
   if (!isDeploymentConfigured) {
@@ -148,19 +152,31 @@ async function getContributedPots(address: `0x${string}`): Promise<Omit<Contribu
   }
 }
 
-async function getContributionFallbackForCreatedPots(
+function dedupeKnownPots(pots: KnownPotRecord[]) {
+  const byPotId = new Map<number, KnownPotRecord>();
+
+  for (const pot of pots) {
+    if (!byPotId.has(pot.onchainPotId)) {
+      byPotId.set(pot.onchainPotId, pot);
+    }
+  }
+
+  return [...byPotId.values()];
+}
+
+async function getContributionFallbackForKnownPots(
   address: `0x${string}`,
-  createdPots: CreatedPotRecord[],
+  knownPots: KnownPotRecord[],
   existingPotIds: Set<number>,
 ) {
-  if (!isDeploymentConfigured || createdPots.length === 0) {
+  if (!isDeploymentConfigured || knownPots.length === 0) {
     return [] as Omit<ContributionHistoryItem, "status">[];
   }
 
   const contractAddress = publicEnv.NEXT_PUBLIC_POT_CONTRACT_ADDRESS as `0x${string}`;
 
   const fallbackItems = await Promise.all(
-    createdPots
+    knownPots
       .filter((pot) => !existingPotIds.has(pot.onchainPotId))
       .map(async (pot) => {
         try {
@@ -228,9 +244,10 @@ export async function GET(request: Request) {
   const address = parsed.data.address;
   const created = await getPotsByOrganizerAddress(address);
   const contributedFromLogs = await getContributedPots(address as `0x${string}`);
-  const contributedFallback = await getContributionFallbackForCreatedPots(
+  const knownPots = dedupeKnownPots([...created, ...(await getRecentPots(250))]);
+  const contributedFallback = await getContributionFallbackForKnownPots(
     address as `0x${string}`,
-    created,
+    knownPots,
     new Set(contributedFromLogs.map((item) => item.onchainPotId)),
   );
 
