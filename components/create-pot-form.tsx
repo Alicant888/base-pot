@@ -174,7 +174,7 @@ export function CreatePotForm() {
 
       setSuccess("Pot created. Redirecting to the shareable page...");
       startTransition(() => {
-        router.push(`/pot/${slug}`);
+        router.push(`/pot/${slug}?created=1`);
       });
     } catch (caught) {
       const message =
@@ -346,3 +346,4 @@ export function CreatePotForm() {
     </div>
   );
 }
+
