@@ -208,11 +208,11 @@ function HistorySection({ title, loading, emptyText, items }: HistorySectionProp
           items.map((item) => (
             <article key={item.key} className="rounded-[24px] border border-slate-200 bg-slate-50/75 p-4">
               <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <h3 className="text-lg font-semibold tracking-tight text-ink">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{item.description}</p>
+                <div className="min-w-0 flex-1">
+                  <h3 className="min-w-0 break-words text-lg font-semibold tracking-tight text-ink [overflow-wrap:anywhere]">{item.title}</h3>
+                  <p className="mt-2 break-words text-sm leading-6 text-muted [overflow-wrap:anywhere]">{item.description}</p>
                 </div>
-                <div className="flex shrink-0 flex-col items-end gap-2">
+                <div className="ml-3 flex shrink-0 flex-col items-end gap-2">
                   {item.href ? (
                     <Link
                       href={item.href}
