@@ -136,6 +136,7 @@ export function PotClient({ pot }: PotClientProps) {
   const goalAmount = potView?.[2] ?? parseUsdc(pot.goalAmount);
   const raisedAmount = potView?.[3] ?? 0n;
   const isOrganizer = address?.toLowerCase() === organizerAddress.toLowerCase();
+  const canContribute = status === "ACTIVE" || status === "FUNDED";
 
   async function ensureTargetChain() {
     if (chainId !== targetChain.id) {
@@ -321,33 +322,35 @@ export function PotClient({ pot }: PotClientProps) {
           </span>
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-[1fr_auto_auto]">
-          <label className="block">
-            <span className="text-sm font-semibold">Contribution amount</span>
-            <input
-              value={contributionInput}
-              onChange={(event) => setContributionInput(event.target.value)}
-              className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-base"
-              placeholder="20"
-            />
-          </label>
-          <button
-            onClick={handleApprove}
-            disabled={!isConnected || expectedAmount <= 0n || isWriting || isSwitching}
-            className="self-end rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold disabled:opacity-50"
-          >
-            {hasAllowance ? "Approved" : "Approve USDC"}
-          </button>
-          <button
-            onClick={handleContribute}
-            disabled={
-              !isConnected || !hasAllowance || !hasEnoughBalance || isWriting || isSwitching
-            }
-            className="self-end rounded-full bg-base px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
-          >
-            Contribute now
-          </button>
-        </div>
+        {canContribute ? (
+          <div className="mt-6 grid gap-4 sm:grid-cols-[1fr_auto_auto]">
+            <label className="block">
+              <span className="text-sm font-semibold">Contribution amount</span>
+              <input
+                value={contributionInput}
+                onChange={(event) => setContributionInput(event.target.value)}
+                className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-base"
+                placeholder="20"
+              />
+            </label>
+            <button
+              onClick={handleApprove}
+              disabled={!isConnected || expectedAmount <= 0n || isWriting || isSwitching}
+              className="self-end rounded-full border border-slate-200 px-5 py-3 text-sm font-semibold disabled:opacity-50"
+            >
+              {hasAllowance ? "Approved" : "Approve USDC"}
+            </button>
+            <button
+              onClick={handleContribute}
+              disabled={
+                !isConnected || !hasAllowance || !hasEnoughBalance || isWriting || isSwitching
+              }
+              className="self-end rounded-full bg-base px-5 py-3 text-sm font-semibold text-white disabled:opacity-50"
+            >
+              Contribute now
+            </button>
+          </div>
+        ) : null}
 
         <div className="mt-5 flex flex-wrap gap-4 text-sm text-muted">
           <span>Wallet status: {accountStatus}</span>
@@ -420,6 +423,7 @@ export function PotClient({ pot }: PotClientProps) {
     </div>
   );
 }
+
 
 
 
