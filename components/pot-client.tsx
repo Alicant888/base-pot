@@ -90,6 +90,12 @@ export function PotClient({ pot }: PotClientProps) {
   const raisedAmount = potView?.[3] ?? 0n;
   const isOrganizer = address?.toLowerCase() === organizerAddress.toLowerCase();
   const canContribute = status === "ACTIVE" || status === "FUNDED";
+  const statusClassName =
+    status === "ACTIVE"
+      ? "text-emerald-600"
+      : status === "CANCELLED" || status === "REFUNDABLE"
+        ? "text-rose-600"
+        : "text-muted";
 
   async function ensureTargetChain() {
     if (chainId !== targetChain.id) {
@@ -265,7 +271,9 @@ export function PotClient({ pot }: PotClientProps) {
         </div>
 
         <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted">
-          <span>Status: {status}</span>
+          <span>
+            Status: <span className={statusClassName}>{status}</span>
+          </span>
           <span>
             Raised: {formatUsdc(raisedAmount)} / {formatUsdc(goalAmount)} USDC
           </span>
@@ -299,7 +307,12 @@ export function PotClient({ pot }: PotClientProps) {
               Contribute now
             </button>
           </div>
-        ) : null}`r`n        <div className="mt-5 flex flex-wrap gap-4 text-sm text-muted">`r`n          <span>Balance: {formatUsdc(balance ?? 0n)} USDC</span>`r`n          <span>Your refundable amount: {formatUsdc(contribution ?? 0n)} USDC</span>`r`n        </div>
+        ) : null}
+
+        <div className="mt-5 flex flex-wrap gap-4 text-sm text-muted">
+          <span>Balance: {formatUsdc(balance ?? 0n)} USDC</span>
+          <span>Your refundable amount: {formatUsdc(contribution ?? 0n)} USDC</span>
+        </div>
 
         {targetChain.id === 31337 && (!hasEnoughBalance || balance === 0n) ? (
           <button
@@ -366,6 +379,7 @@ export function PotClient({ pot }: PotClientProps) {
     </div>
   );
 }
+
 
 
 
