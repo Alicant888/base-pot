@@ -7,7 +7,7 @@ import { Archive, ArrowRight, History, Plus, Undo2 } from "lucide-react";
 import { useAccount } from "wagmi";
 
 import { WalletPanel } from "@/components/wallet-panel";
-import { potStatusChipStyles, potStatusLabelStyles } from "@/lib/pot-status-ui";
+import { potStatusChipStyles } from "@/lib/pot-status-ui";
 import type { PotStatus } from "@/lib/pot-state";
 import { cn, formatDateTime } from "@/lib/utils";
 
@@ -414,7 +414,7 @@ function HistorySection({ title, loading, emptyText, items, onArchive }: History
                         potStatusChipStyles[item.badge],
                       )}
                     >
-                      <span className={cn("inline-block uppercase", potStatusLabelStyles[item.badge])}>{item.badge}</span>
+                      {item.badge}
                     </span>
                   ) : null}
                 </div>
@@ -480,7 +480,7 @@ function ArchiveSection({ loading, emptyText, items, onRestore }: ArchiveSection
                         potStatusChipStyles[item.badge],
                       )}
                     >
-                      <span className={cn("inline-block uppercase", potStatusLabelStyles[item.badge])}>{item.badge}</span>
+                      {item.badge}
                     </span>
                   ) : null}
                 </div>
