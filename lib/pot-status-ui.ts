@@ -26,3 +26,12 @@ export const potStatusTextStyles: Record<PotStatus, string> = {
   EXPIRED: "text-amber-700",
   REFUNDABLE: "text-rose-700",
 };
+
+export const potStatusLabelStyles: Record<PotStatus, string> = {
+  ACTIVE: "",
+  FUNDED: "",
+  FINALIZED: "scale-x-[0.9]",
+  CANCELLED: "",
+  EXPIRED: "",
+  REFUNDABLE: "",
+};
