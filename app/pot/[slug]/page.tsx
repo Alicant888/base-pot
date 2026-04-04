@@ -1,6 +1,7 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { PotBottomBar } from "@/components/pot-bottom-bar";
 import { PotClientIsland } from "@/components/pot-client-island";
 import { PotOverview, PotSidebarStatic } from "@/components/pot-static-sections";
 import { getOnchainPotActivity } from "@/lib/onchain-activity";
@@ -54,22 +55,26 @@ export default async function PotPage({ params }: PotPageProps) {
   };
 
   return (
-    <div className="grid gap-8 xl:grid-cols-[1.25fr_0.75fr]">
-      <div className="space-y-6">
-        <PotOverview pot={staticPot} onchainPot={onchainPot} activity={activity} />
+    <>
+      <div className="grid gap-8 pb-36 xl:grid-cols-[1.25fr_0.75fr] xl:pb-40">
+        <div className="space-y-6">
+          <PotOverview pot={staticPot} onchainPot={onchainPot} activity={activity} />
+        </div>
+
+        <div className="space-y-6">
+          <PotClientIsland
+            pot={{
+              onchainPotId: pot.onchainPotId,
+              goalAmount: pot.goalAmount,
+              organizerAddress: pot.organizerAddress,
+              suggestedContribution: pot.suggestedContribution,
+            }}
+          />
+          <PotSidebarStatic pot={staticPot} onchainPot={onchainPot} activity={activity} />
+        </div>
       </div>
 
-      <div className="space-y-6">
-        <PotClientIsland
-          pot={{
-            onchainPotId: pot.onchainPotId,
-            goalAmount: pot.goalAmount,
-            organizerAddress: pot.organizerAddress,
-            suggestedContribution: pot.suggestedContribution,
-          }}
-        />
-        <PotSidebarStatic pot={staticPot} onchainPot={onchainPot} activity={activity} />
-      </div>
-    </div>
+      <PotBottomBar slug={slug} title={pot.title} />
+    </>
   );
 }
