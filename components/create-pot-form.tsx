@@ -44,6 +44,14 @@ function slugifyTitle(title: string) {
     .slice(0, 48);
 }
 
+function splitDeadline(deadline: string) {
+  const [date = "", time = ""] = deadline.split("T");
+  return {
+    date,
+    time: time.slice(0, 5),
+  };
+}
+
 export function CreatePotForm() {
   const router = useRouter();
   const publicClient = usePublicClient({ chainId: targetChain.id });
@@ -59,6 +67,16 @@ export function CreatePotForm() {
     () => `/pot/${slugifyTitle(form.title || "team-pot")}-?`,
     [form.title],
   );
+  const deadlineParts = splitDeadline(form.deadline);
+
+  function updateDeadline(next: Partial<{ date: string; time: string }>) {
+    const date = next.date ?? deadlineParts.date;
+    const time = next.time ?? deadlineParts.time;
+    setForm((current) => ({
+      ...current,
+      deadline: date && time ? `${date}T${time}` : date || current.deadline,
+    }));
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -224,17 +242,23 @@ export function CreatePotForm() {
                 />
               </label>
 
-              <label>
+              <div className="min-w-0">
                 <span className="text-sm font-semibold">Deadline</span>
-                <input
-                  type="datetime-local"
-                  value={form.deadline}
-                  onChange={(event) =>
-                    setForm((current) => ({ ...current, deadline: event.target.value }))
-                  }
-                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                />
-              </label>
+                <div className="mt-2 grid min-w-0 grid-cols-2 gap-3">
+                  <input
+                    type="date"
+                    value={deadlineParts.date}
+                    onChange={(event) => updateDeadline({ date: event.target.value })}
+                    className="min-w-0 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-base"
+                  />
+                  <input
+                    type="time"
+                    value={deadlineParts.time}
+                    onChange={(event) => updateDeadline({ time: event.target.value })}
+                    className="min-w-0 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-base"
+                  />
+                </div>
+              </div>
 
               <label className="md:col-span-2">
                 <span className="text-sm font-semibold">Recipient address</span>
@@ -324,4 +348,3 @@ export function CreatePotForm() {
     </div>
   );
 }
-
