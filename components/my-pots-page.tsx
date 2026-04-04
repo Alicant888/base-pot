@@ -411,7 +411,7 @@ function HistorySection({ title, loading, emptyText, items, onArchive }: History
                     <span
                       className={cn(
                         "rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]",
-                        item.badge === "FINALIZED" ? "px-2 tracking-[0.12em]" : null,
+                        item.badge === "FINALIZED" ? "px-2 text-[10px] tracking-[0.06em]" : null,
                         potStatusChipStyles[item.badge],
                       )}
                     >
