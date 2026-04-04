@@ -265,18 +265,6 @@ export function CreatePotForm() {
                   placeholder="25"
                 />
               </label>
-
-              <label>
-                <span className="text-sm font-semibold">Emoji</span>
-                <input
-                  value={form.emoji}
-                  onChange={(event) =>
-                    setForm((current) => ({ ...current, emoji: event.target.value }))
-                  }
-                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                  placeholder="*"
-                />
-              </label>
             </div>
           </section>
 
@@ -336,3 +324,4 @@ export function CreatePotForm() {
     </div>
   );
 }
+
