@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useState } from "react";
 import {
   useAccount,
   usePublicClient,
@@ -26,26 +26,6 @@ type PotClientProps = {
   };
 };
 
-function summarizeCapabilities(baseCapabilities: Record<string, unknown> | null) {
-  if (!baseCapabilities) {
-    return "Standard wallet flow";
-  }
-
-  const baseChainCaps = baseCapabilities["0x2105"] as
-    | Record<string, { supported?: unknown }>
-    | undefined;
-
-  if (!baseChainCaps) {
-    return "Base Account unavailable";
-  }
-
-  const supported = Object.entries(baseChainCaps)
-    .filter(([, value]) => Boolean(value?.supported))
-    .map(([key]) => key);
-
-  return supported.length > 0 ? `Capabilities: ${supported.join(", ")}` : "Base Account connected";
-}
-
 function summarizeActionError(caught: unknown) {
   console.error("Pot action failed", caught);
   return "Error";
@@ -61,7 +41,6 @@ export function PotClient({ pot }: PotClientProps) {
   const [contributionInput, setContributionInput] = useState(pot.suggestedContribution ?? "20");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [capabilitySummary, setCapabilitySummary] = useState("Standard wallet flow");
 
   const contractAddress = publicEnv.NEXT_PUBLIC_POT_CONTRACT_ADDRESS as `0x${string}`;
   const usdcAddress = publicEnv.NEXT_PUBLIC_USDC_ADDRESS as `0x${string}`;
@@ -101,31 +80,6 @@ export function PotClient({ pot }: PotClientProps) {
     chainId: targetChain.id,
     query: { enabled: Boolean(address) },
   });
-
-  useEffect(() => {
-    let cancelled = false;
-    const accountAddress = address;
-
-    if (!accountAddress) {
-      setCapabilitySummary("Standard wallet flow");
-      return;
-    }
-
-    async function loadCapabilities() {
-      const { getBaseAccountCapabilities } = await import("@/lib/base-account");
-      const baseCapabilities = await getBaseAccountCapabilities(accountAddress as string);
-
-      if (!cancelled) {
-        setCapabilitySummary(summarizeCapabilities(baseCapabilities));
-      }
-    }
-
-    void loadCapabilities();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [address]);
 
   const potView = onchainPot as PotTuple | undefined;
   const status = derivePotStatus(potView);
@@ -310,9 +264,6 @@ export function PotClient({ pot }: PotClientProps) {
               Approve USDC, then chip in
             </h2>
           </div>
-          <div className="rounded-full bg-mist px-4 py-2 text-sm font-semibold text-base">
-            {capabilitySummary}
-          </div>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted">
@@ -423,6 +374,8 @@ export function PotClient({ pot }: PotClientProps) {
     </div>
   );
 }
+
+
 
 
 
