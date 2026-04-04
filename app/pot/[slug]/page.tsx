@@ -65,7 +65,7 @@ export default async function PotPage({ params, searchParams }: PotPageProps) {
       <div className="space-y-6 pb-36 xl:pb-40">
         {showCreatedNotice ? <PotCreatedNotice slug={slug} title={pot.title} /> : null}
 
-        <div className="grid gap-8 xl:grid-cols-[1.25fr_0.75fr]">
+        <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
           <div className="space-y-6">
             <PotOverview pot={staticPot} onchainPot={onchainPot} activity={activity} />
           </div>
