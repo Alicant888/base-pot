@@ -36,12 +36,62 @@ const initialForm = {
   suggestedContribution: "20",
 };
 
+const cyrillicToLatinMap: Record<string, string> = {
+  а: "a",
+  б: "b",
+  в: "v",
+  г: "g",
+  д: "d",
+  е: "e",
+  ё: "e",
+  ж: "zh",
+  з: "z",
+  и: "i",
+  й: "y",
+  к: "k",
+  л: "l",
+  м: "m",
+  н: "n",
+  о: "o",
+  п: "p",
+  р: "r",
+  с: "s",
+  т: "t",
+  у: "u",
+  ф: "f",
+  х: "h",
+  ц: "ts",
+  ч: "ch",
+  ш: "sh",
+  щ: "sch",
+  ъ: "",
+  ы: "y",
+  ь: "",
+  э: "e",
+  ю: "yu",
+  я: "ya",
+  і: "i",
+  ї: "yi",
+  є: "ye",
+  ґ: "g",
+};
+
+function transliterateToAscii(value: string) {
+  return value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .split("")
+    .map((character) => cyrillicToLatinMap[character] ?? character)
+    .join("");
+}
+
 function slugifyTitle(title: string) {
-  return title
-    .toLowerCase()
+  const normalized = transliterateToAscii(title.toLowerCase())
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 48);
+
+  return normalized || "pot";
 }
 
 function formatDeadlineDisplay(deadline: string) {
@@ -346,5 +396,6 @@ export function CreatePotForm() {
     </div>
   );
 }
+
 
 

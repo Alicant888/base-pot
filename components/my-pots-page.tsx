@@ -209,34 +209,34 @@ function HistorySection({ title, loading, emptyText, items }: HistorySectionProp
             <article key={item.key} className="rounded-[24px] border border-slate-200 bg-slate-50/75 p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg font-semibold tracking-tight text-ink">{item.title}</h3>
-                    {item.badge ? (
-                      <span
-                        className={cn(
-                          "rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]",
-                          potStatusChipStyles[item.badge as PotStatus],
-                        )}
-                      >
-                        {item.badge}
-                      </span>
-                    ) : null}
-                  </div>
+                  <h3 className="text-lg font-semibold tracking-tight text-ink">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-muted">{item.description}</p>
                 </div>
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    className="inline-flex items-center justify-center gap-1 rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-ink"
-                  >
-                    Open
-                    <ArrowRight className="size-4" />
-                  </Link>
-                ) : (
-                  <span className="rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-muted">
-                    No link yet
-                  </span>
-                )}
+                <div className="flex shrink-0 flex-col items-end gap-2">
+                  {item.href ? (
+                    <Link
+                      href={item.href}
+                      className="inline-flex items-center justify-center gap-1 rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-ink"
+                    >
+                      Open
+                      <ArrowRight className="size-4" />
+                    </Link>
+                  ) : (
+                    <span className="rounded-full border border-slate-200 px-3 py-2 text-sm font-semibold text-muted">
+                      No link yet
+                    </span>
+                  )}
+                  {item.badge ? (
+                    <span
+                      className={cn(
+                        "rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]",
+                        potStatusChipStyles[item.badge as PotStatus],
+                      )}
+                    >
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </div>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-3 text-sm text-muted">
@@ -251,6 +251,7 @@ function HistorySection({ title, loading, emptyText, items }: HistorySectionProp
     </section>
   );
 }
+
 
 
 
