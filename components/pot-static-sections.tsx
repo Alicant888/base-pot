@@ -1,4 +1,4 @@
-﻿import type { PotActivity } from "@/lib/onchain-activity";
+import type { PotActivity } from "@/lib/onchain-activity";
 import type { PotTuple } from "@/lib/pot-state";
 import { derivePotStatus } from "@/lib/pot-state";
 import { targetChain } from "@/lib/chains";
@@ -109,7 +109,7 @@ export function PotSidebarStatic({ pot, onchainPot, activity }: PotPageStaticPro
             <dd className="font-semibold">#{pot.onchainPotId}</dd>
           </div>
           <div className="flex items-center justify-between gap-4">
-            <dt className="text-muted">Metadata deadline</dt>
+            <dt className="text-muted">Deadline</dt>
             <dd className="font-semibold">{formatDateTime(pot.deadline)}</dd>
           </div>
         </dl>
@@ -145,3 +145,4 @@ export function PotSidebarStatic({ pot, onchainPot, activity }: PotPageStaticPro
     </div>
   );
 }
+
