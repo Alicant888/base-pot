@@ -10,7 +10,6 @@ import {
   useWriteContract,
 } from "wagmi";
 
-import { WalletPanel } from "@/components/wallet-panel";
 import { targetChain } from "@/lib/chains";
 import { BASE_POT_ABI, ERC20_ABI } from "@/lib/contracts";
 import { publicEnv } from "@/lib/env";
@@ -33,7 +32,7 @@ function summarizeActionError(caught: unknown) {
 
 export function PotClient({ pot }: PotClientProps) {
   const router = useRouter();
-  const { address, chainId, isConnected, status: accountStatus } = useAccount();
+  const { address, chainId, isConnected } = useAccount();
   const publicClient = usePublicClient({ chainId: targetChain.id });
   const { switchChainAsync, isPending: isSwitching } = useSwitchChain();
   const { writeContractAsync, isPending: isWriting } = useWriteContract();
@@ -252,7 +251,6 @@ export function PotClient({ pot }: PotClientProps) {
 
   return (
     <div className="space-y-6">
-      <WalletPanel compact />
 
       <section className="rounded-[36px] border border-slate-200 bg-white p-6 shadow-panel sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -301,13 +299,7 @@ export function PotClient({ pot }: PotClientProps) {
               Contribute now
             </button>
           </div>
-        ) : null}
-
-        <div className="mt-5 flex flex-wrap gap-4 text-sm text-muted">
-          <span>Wallet status: {accountStatus}</span>
-          <span>Balance: {formatUsdc(balance ?? 0n)} USDC</span>
-          <span>Your refundable amount: {formatUsdc(contribution ?? 0n)} USDC</span>
-        </div>
+        ) : null}`r`n        <div className="mt-5 flex flex-wrap gap-4 text-sm text-muted">`r`n          <span>Balance: {formatUsdc(balance ?? 0n)} USDC</span>`r`n          <span>Your refundable amount: {formatUsdc(contribution ?? 0n)} USDC</span>`r`n        </div>
 
         {targetChain.id === 31337 && (!hasEnoughBalance || balance === 0n) ? (
           <button
@@ -374,6 +366,7 @@ export function PotClient({ pot }: PotClientProps) {
     </div>
   );
 }
+
 
 
 
