@@ -32,7 +32,7 @@ const initialForm = {
   goalAmount: "100",
   deadline: tomorrowIso,
   recipientAddress: "",
-  emoji: "*",
+  emoji: "",
   suggestedContribution: "20",
 };
 
@@ -346,4 +346,5 @@ export function CreatePotForm() {
     </div>
   );
 }
+
 

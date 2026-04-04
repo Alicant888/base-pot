@@ -31,6 +31,7 @@ type PotPageStaticProps = {
 };
 
 export function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
+  const displayEmoji = pot.emoji && pot.emoji !== "*" ? pot.emoji : null;
   const raisedAmount = onchainPot?.[3] ?? 0n;
   const goalAmount = onchainPot?.[2] ?? parseUsdc(pot.goalAmount);
   const deadline = onchainPot?.[4]
@@ -47,8 +48,8 @@ export function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
             Share-ready pot
           </p>
           <div className="mt-3 flex items-center gap-3">
-            {pot.emoji ? <span className="text-3xl">{pot.emoji}</span> : null}
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">{pot.title}</h1>
+            {displayEmoji ? <span className="text-3xl">{displayEmoji}</span> : null}
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{pot.title}</h1>
           </div>
         </div>
         <StatusPill status={status} />
@@ -145,4 +146,5 @@ export function PotSidebarStatic({ pot, onchainPot, activity }: PotPageStaticPro
     </div>
   );
 }
+
 
