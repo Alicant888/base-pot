@@ -17,7 +17,7 @@ type CreatedPot = {
   goalAmount: string;
   deadline: string;
   createdAt: string;
-  isFunded: boolean;
+  status: string;
 };
 
 type ContributedPot = {
@@ -138,7 +138,7 @@ export function MyPotsPage() {
             metaLeft: `Goal ${item.goalAmount} USDC`,
             metaRight: `Created ${formatDateTime(item.createdAt)}`,
             footer: `Deadline ${formatDateTime(item.deadline)}`,
-            badge: item.isFunded ? "Funded" : null,
+            badge: item.status,
           }))}
         />
 
@@ -213,9 +213,17 @@ function HistorySection({ title, loading, emptyText, items }: HistorySectionProp
                       <span
                         className={cn(
                           "rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]",
-                          item.badge === "Funded"
-                            ? "bg-base/10 text-base"
-                            : "bg-slate-100 text-muted",
+                          item.badge === "ACTIVE"
+                            ? "bg-emerald-50 text-emerald-600"
+                            : item.badge === "FUNDED"
+                              ? "bg-base/10 text-base"
+                              : item.badge === "FINALIZED"
+                                ? "bg-slate-100 text-slate-700"
+                                : item.badge === "CANCELLED" || item.badge === "REFUNDABLE"
+                                  ? "bg-rose-50 text-rose-600"
+                                  : item.badge === "EXPIRED"
+                                    ? "bg-amber-50 text-amber-700"
+                                    : "bg-slate-100 text-muted",
                         )}
                       >
                         {item.badge}
@@ -251,3 +259,4 @@ function HistorySection({ title, loading, emptyText, items }: HistorySectionProp
     </section>
   );
 }
+

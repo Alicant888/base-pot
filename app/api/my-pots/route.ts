@@ -199,16 +199,16 @@ async function getContributionFallbackForCreatedPots(
   return fallbackItems.flatMap((item) => (item ? [item] : []));
 }
 
-async function getCreatedFundingState(createdPots: CreatedPotRecord[]) {
+async function getCreatedStatuses(createdPots: CreatedPotRecord[]) {
   if (!isDeploymentConfigured || createdPots.length === 0) {
-    return new Map<number, boolean>();
+    return new Map<number, string>();
   }
 
   const entries = await Promise.all(
     createdPots.map(async (pot) => {
       const onchainPot = await getOnchainPot(pot.onchainPotId);
       const status = derivePotStatus(onchainPot);
-      return [pot.onchainPotId, status === "FUNDED" || status === "FINALIZED"] as const;
+      return [pot.onchainPotId, status] as const;
     }),
   );
 
@@ -226,8 +226,8 @@ export async function GET(request: Request) {
   const address = parsed.data.address;
   const created = await getPotsByOrganizerAddress(address);
   const contributedFromLogs = await getContributedPots(address as `0x${string}`);
-  const [createdFundingState, contributedFallback] = await Promise.all([
-    getCreatedFundingState(created),
+  const [createdStatuses, contributedFallback] = await Promise.all([
+    getCreatedStatuses(created),
     getContributionFallbackForCreatedPots(
       address as `0x${string}`,
       created,
@@ -249,8 +249,9 @@ export async function GET(request: Request) {
       goalAmount: pot.goalAmount,
       deadline: pot.deadline.toISOString(),
       createdAt: pot.createdAt.toISOString(),
-      isFunded: createdFundingState.get(pot.onchainPotId) ?? false,
+      status: createdStatuses.get(pot.onchainPotId) ?? "ACTIVE",
     })),
     contributed,
   });
 }
+
