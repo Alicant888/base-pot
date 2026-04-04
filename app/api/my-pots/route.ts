@@ -7,7 +7,7 @@ import { isDeploymentConfigured, publicEnv } from "@/lib/env";
 import { onchainPublicClient } from "@/lib/onchain-client";
 import { getOnchainPot } from "@/lib/onchain-pot";
 import { getPotsByOnchainIds, getPotsByOrganizerAddress } from "@/lib/pots";
-import { derivePotStatus } from "@/lib/pot-state";
+import { derivePotStatus, type PotStatus } from "@/lib/pot-state";
 import { formatUsdc } from "@/lib/utils";
 
 const querySchema = z.object({
@@ -28,11 +28,12 @@ type ContributionHistoryItem = {
   description: string;
   goalAmount: string | null;
   deadline: string | null;
+  status: PotStatus;
 };
 
 type CreatedPotRecord = Awaited<ReturnType<typeof getPotsByOrganizerAddress>>[number];
 
-async function getContributedPots(address: `0x${string}`): Promise<ContributionHistoryItem[]> {
+async function getContributedPots(address: `0x${string}`): Promise<Omit<ContributionHistoryItem, "status">[]> {
   if (!isDeploymentConfigured) {
     return [];
   }
@@ -153,7 +154,7 @@ async function getContributionFallbackForCreatedPots(
   existingPotIds: Set<number>,
 ) {
   if (!isDeploymentConfigured || createdPots.length === 0) {
-    return [] as ContributionHistoryItem[];
+    return [] as Omit<ContributionHistoryItem, "status">[];
   }
 
   const contractAddress = publicEnv.NEXT_PUBLIC_POT_CONTRACT_ADDRESS as `0x${string}`;
@@ -184,7 +185,7 @@ async function getContributionFallbackForCreatedPots(
             description: pot.description,
             goalAmount: pot.goalAmount,
             deadline: pot.deadline.toISOString(),
-          } satisfies ContributionHistoryItem;
+          } satisfies Omit<ContributionHistoryItem, "status">;
         } catch (error) {
           console.error("Failed to load fallback contribution", {
             address,
@@ -199,16 +200,17 @@ async function getContributionFallbackForCreatedPots(
   return fallbackItems.flatMap((item) => (item ? [item] : []));
 }
 
-async function getCreatedStatuses(createdPots: CreatedPotRecord[]) {
-  if (!isDeploymentConfigured || createdPots.length === 0) {
-    return new Map<number, string>();
+async function getPotStatuses(potIds: number[]) {
+  if (!isDeploymentConfigured || potIds.length === 0) {
+    return new Map<number, PotStatus>();
   }
 
+  const uniquePotIds = [...new Set(potIds)];
   const entries = await Promise.all(
-    createdPots.map(async (pot) => {
-      const onchainPot = await getOnchainPot(pot.onchainPotId);
+    uniquePotIds.map(async (potId) => {
+      const onchainPot = await getOnchainPot(potId);
       const status = derivePotStatus(onchainPot);
-      return [pot.onchainPotId, status] as const;
+      return [potId, status] as const;
     }),
   );
 
@@ -226,19 +228,21 @@ export async function GET(request: Request) {
   const address = parsed.data.address;
   const created = await getPotsByOrganizerAddress(address);
   const contributedFromLogs = await getContributedPots(address as `0x${string}`);
-  const [createdStatuses, contributedFallback] = await Promise.all([
-    getCreatedStatuses(created),
-    getContributionFallbackForCreatedPots(
-      address as `0x${string}`,
-      created,
-      new Set(contributedFromLogs.map((item) => item.onchainPotId)),
-    ),
-  ]);
+  const contributedFallback = await getContributionFallbackForCreatedPots(
+    address as `0x${string}`,
+    created,
+    new Set(contributedFromLogs.map((item) => item.onchainPotId)),
+  );
 
-  const contributed = [...contributedFromLogs, ...contributedFallback].sort(
+  const contributedBase = [...contributedFromLogs, ...contributedFallback].sort(
     (left, right) =>
       new Date(right.occurredAt).getTime() - new Date(left.occurredAt).getTime(),
   );
+
+  const [createdStatuses, contributedStatuses] = await Promise.all([
+    getPotStatuses(created.map((pot) => pot.onchainPotId)),
+    getPotStatuses(contributedBase.map((item) => item.onchainPotId)),
+  ]);
 
   return NextResponse.json({
     created: created.map((pot) => ({
@@ -251,7 +255,9 @@ export async function GET(request: Request) {
       createdAt: pot.createdAt.toISOString(),
       status: createdStatuses.get(pot.onchainPotId) ?? "ACTIVE",
     })),
-    contributed,
+    contributed: contributedBase.map((item) => ({
+      ...item,
+      status: contributedStatuses.get(item.onchainPotId) ?? "ACTIVE",
+    })),
   });
 }
-
