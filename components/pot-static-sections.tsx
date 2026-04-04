@@ -53,7 +53,10 @@ export function PotOverview({ pot, onchainPot, activity }: PotPageStaticProps) {
               {pot.title}
             </h1>
           </div>
-        </div>        <StatusPill status={status} />
+        </div>
+        <div className="shrink-0">
+          <StatusPill status={status} />
+        </div>
       </div>
 
       <p className="mt-5 max-w-2xl break-words text-base leading-7 text-muted [overflow-wrap:anywhere]">
