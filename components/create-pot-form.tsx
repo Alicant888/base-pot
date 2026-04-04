@@ -21,7 +21,6 @@ const formSchema = z.object({
   deadline: z.string().min(1),
   recipientAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
   emoji: z.string().trim().max(8).optional(),
-  suggestedContribution: z.string().trim().optional(),
 });
 
 const tomorrowIso = new Date(Date.now() + 86_400_000).toISOString().slice(0, 16);
@@ -33,47 +32,46 @@ const initialForm = {
   deadline: tomorrowIso,
   recipientAddress: "",
   emoji: "",
-  suggestedContribution: "20",
 };
 
 const cyrillicToLatinMap: Record<string, string> = {
-  а: "a",
-  б: "b",
-  в: "v",
-  г: "g",
-  д: "d",
-  е: "e",
-  ё: "e",
-  ж: "zh",
-  з: "z",
-  и: "i",
-  й: "y",
-  к: "k",
-  л: "l",
-  м: "m",
-  н: "n",
-  о: "o",
-  п: "p",
-  р: "r",
-  с: "s",
-  т: "t",
-  у: "u",
-  ф: "f",
-  х: "h",
-  ц: "ts",
-  ч: "ch",
-  ш: "sh",
-  щ: "sch",
-  ъ: "",
-  ы: "y",
-  ь: "",
-  э: "e",
-  ю: "yu",
-  я: "ya",
-  і: "i",
-  ї: "yi",
-  є: "ye",
-  ґ: "g",
+  "\u0430": "a",
+  "\u0431": "b",
+  "\u0432": "v",
+  "\u0433": "g",
+  "\u0434": "d",
+  "\u0435": "e",
+  "\u0451": "e",
+  "\u0436": "zh",
+  "\u0437": "z",
+  "\u0438": "i",
+  "\u0439": "y",
+  "\u043a": "k",
+  "\u043b": "l",
+  "\u043c": "m",
+  "\u043d": "n",
+  "\u043e": "o",
+  "\u043f": "p",
+  "\u0440": "r",
+  "\u0441": "s",
+  "\u0442": "t",
+  "\u0443": "u",
+  "\u0444": "f",
+  "\u0445": "h",
+  "\u0446": "ts",
+  "\u0447": "ch",
+  "\u0448": "sh",
+  "\u0449": "sch",
+  "\u044a": "",
+  "\u044b": "y",
+  "\u044c": "",
+  "\u044d": "e",
+  "\u044e": "yu",
+  "\u044f": "ya",
+  "\u0456": "i",
+  "\u0457": "yi",
+  "\u0454": "ye",
+  "\u0491": "g",
 };
 
 function transliterateToAscii(value: string) {
@@ -84,7 +82,6 @@ function transliterateToAscii(value: string) {
     .map((character) => cyrillicToLatinMap[character] ?? character)
     .join("");
 }
-
 function slugifyTitle(title: string) {
   const normalized = transliterateToAscii(title.toLowerCase())
     .replace(/[^a-z0-9]+/g, "-")
@@ -214,7 +211,6 @@ export function CreatePotForm() {
           recipientAddress: parsed.data.recipientAddress,
           organizerAddress: address,
           emoji: parsed.data.emoji,
-          suggestedContribution: parsed.data.suggestedContribution,
         }),
       });
 
@@ -320,21 +316,6 @@ export function CreatePotForm() {
                   }
                   className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm outline-none transition focus:border-base"
                   placeholder="0x..."
-                />
-              </label>
-
-              <label>
-                <span className="text-sm font-semibold">Suggested contribution</span>
-                <input
-                  value={form.suggestedContribution}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      suggestedContribution: event.target.value,
-                    }))
-                  }
-                  className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 outline-none transition focus:border-base"
-                  placeholder="25"
                 />
               </label>
             </div>
