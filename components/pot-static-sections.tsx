@@ -43,45 +43,42 @@ export async function PotOverview({ pot, onchainPot, activity }: PotPageStaticPr
 
   return (
     <section className="rounded-[36px] border border-slate-200 bg-white p-6 shadow-panel sm:p-8">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-            Share-ready pot
-          </p>
-          <div className="mt-3 flex w-full min-w-0 items-start gap-3">
-            {displayEmoji ? <span className="text-3xl">{displayEmoji}</span> : null}
-            <h1 className="min-w-0 max-w-full break-words text-[1.65rem] font-semibold tracking-tight [overflow-wrap:anywhere] sm:text-[2.1rem]">
-              {pot.title}
-            </h1>
-          </div>
-        </div>
+      <div className="flex items-start justify-between gap-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+          Share-ready pot
+        </p>
         <div className="shrink-0">
           <StatusPill status={status} />
         </div>
+      </div>
+
+      <div className="mt-3 flex w-full min-w-0 items-start gap-3">
+        {displayEmoji ? <span className="text-3xl">{displayEmoji}</span> : null}
+        <h1 className="min-w-0 w-full max-w-none break-words text-[1.65rem] font-semibold tracking-tight [overflow-wrap:anywhere] sm:text-[2.1rem]">
+          {pot.title}
+        </h1>
       </div>
 
       <p className="mt-5 max-w-2xl break-words text-base leading-7 text-muted [overflow-wrap:anywhere]">
         {pot.description}
       </p>
 
-      <div className="mt-8 grid gap-5 rounded-[28px] border border-slate-200 bg-slate-50/70 p-5 sm:grid-cols-4">
-        <div>
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4">
+        <div className="rounded-[24px] border border-slate-200 bg-slate-50/70 px-4 py-4 sm:px-5">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Raised</p>
-          <p className="mt-2 text-2xl font-semibold">{formatUsdc(raisedAmount)} USDC</p>
+          <p className="mt-2 text-xl font-semibold sm:text-2xl">{formatUsdc(raisedAmount)} USDC</p>
         </div>
-        <div>
+        <div className="rounded-[24px] border border-slate-200 bg-slate-50/70 px-4 py-4 sm:px-5">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Goal</p>
-          <p className="mt-2 text-2xl font-semibold">{formatUsdc(goalAmount)} USDC</p>
+          <p className="mt-2 text-xl font-semibold sm:text-2xl">{formatUsdc(goalAmount)} USDC</p>
         </div>
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-            Contributors
-          </p>
-          <p className="mt-2 text-2xl font-semibold">{activity.contributorCount}</p>
+        <div className="rounded-[24px] border border-slate-200 bg-slate-50/70 px-4 py-4 sm:px-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Contributors</p>
+          <p className="mt-2 text-xl font-semibold sm:text-2xl">{activity.contributorCount}</p>
         </div>
-        <div>
+        <div className="rounded-[24px] border border-slate-200 bg-slate-50/70 px-4 py-4 sm:px-5">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Deadline</p>
-          <p className="mt-2 text-lg font-semibold">{formatRelativeDeadline(deadline)}</p>
+          <p className="mt-2 text-base font-semibold sm:text-lg">{formatRelativeDeadline(deadline)}</p>
         </div>
       </div>
 
